@@ -186,3 +186,46 @@ footer nav ul {
 	margin: 2em
 }
 
+/********Partie ajouter**********/
+
+/****Partie filtres****/
+#filtre
+{
+	text-align: center;
+	margin-bottom: 50px;
+	margin-top: 40px;
+}
+
+#filtre button
+{
+	min-width: 100px;
+	height: 50px;
+	
+	text-align: center;
+	font-family: 'Syne';
+	font-style: normal;
+	font-weight: bold;
+	font-size: 16px;
+	line-height: 19px;
+	color: #1D6154;
+	background-color: #ffffff;
+
+	margin-right: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+
+	border-radius: 60px;
+	border: 2px solid #1D6154;
+}
+
+/*#filtre > button:nth-child(1)
+{
+	background-color: #1D6154;
+	color: #FFFFFF;
+}*/
+
+#filtre button:hover
+{
+    border-color:  #0065FC;
+    cursor: pointer;
+}
