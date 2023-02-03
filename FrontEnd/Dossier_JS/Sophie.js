@@ -39,39 +39,110 @@ genererGallery(pictures);
 
 /********Partie filtres********/
 // Récupération les photos de categorie depuis le serveur ou  sur le site
-const reponseCategori = await fetch('http://localhost:5678/api/categories'); //L'adresse ou on doit recuperer les photos de categorie
-const picturesFiltre = await reponseCategori.json(); //Stocke les photos de categorie dans pictureFiltre
+//const reponseCategori = await fetch('http://localhost:5678/api/categories'); //L'adresse ou on doit recuperer les photos de categorie
+//const picturesFiltre = await reponseCategori.json(); //Stocke les photos de categorie dans pictureFiltre
+
+//Permet de recupere tous les categorie dans l'API works
+const copiePictures = Array.from(pictures);
+const categories = copiePictures.map(categ => categ.category)
+console.log(categories);
+
+const copieCategorie = Array.from(categories);
+console.log(copieCategorie);
+const monSetcateg = new Set();
+
+for (let i = 0; i < copieCategorie.length; i++) 
+{
+    monSetcateg.add(copieCategorie[i].name);
+}
+
+console.log("monSetcateg", monSetcateg);
+// const ctg = [...new Set(copieCategorie.forEach(c => c.name))];
+// console.log("ctg", ctg);
 
 //Permet de stocker chaque bouton
-let stockButton = [];
+//let stockButton = [];
+
+//Creer le bouton tous
+let buttonElement = document.createElement("button");
+buttonElement.setAttribute('id','button'+ 0); //Mettre l'attribut id sur 'button'
+buttonElement.textContent = "Tous";
+
+// Récupération de l'élément du DOM qui accueillera les fiches
+const Divfiltre = document.querySelector("#filtre");
+
+// On rattache les balise button a leur parent filtre du html
+Divfiltre.appendChild(buttonElement);
+let cmpt = 0; //Permet d'incrementer les bounton
 
 //Cette boucle permet de creer les boutons et les rajoutes aux html
-for (let i = 0; i < 4; i++) 
+for (const item of monSetcateg) 
 {
     // Récupération de l'élément du DOM qui accueillera les fiches
-    const Divfiltre = document.querySelector("#filtre");
+    //const Divfiltre = document.querySelector("#filtre");
+    cmpt ++;
 
     //Creation du ballise button
-    const buttonElement = document.createElement("button");
-    buttonElement.setAttribute('id','button'+i); //Mettre l'attribut id sur 'button'
-
+    buttonElement = document.createElement("button");
+    buttonElement.setAttribute('id','button' + cmpt); //Mettre l'attribut id sur 'button'
+    buttonElement.textContent = item;
 
     //stokage des buttons
-    stockButton[i] = buttonElement;
+    //stockButton[i] = buttonElement;
 
     // On rattache les balise button a leur parent filtre du html
     Divfiltre.appendChild(buttonElement);
 }
 
+const filtresBTN = document.querySelectorAll("button");
+console.log("filtresBTN", filtresBTN);
+
+for (let i = 0; i < filtresBTN.length; i++) 
+{
+    filtresBTN[i].addEventListener("click", function(e)
+    {
+        e.target.style.color = "#FFFFFF"; // Change la couleur du texte en blanche*/
+        e.target.style.backgroundColor = "#1D6154"; // Change la couleur du fond en vert
+        
+        console.log("e", e);
+        const copiefiltresBTN = Array.from(filtresBTN);
+        console.log("copiefiltresBTN", copiefiltresBTN);
+
+        const btnNoClic = copiefiltresBTN.filter(function(selctBTN)
+        {
+            console.log("selctBTN", selctBTN);
+
+            if (selctBTN != e.target)
+            {
+                return selctBTN;
+            }
+
+        });
+        console.log("btnNoclic", btnNoClic);
+
+        for (const item of btnNoClic) 
+        {
+            item.style.backgroundColor = "#ffffff"; // Change la couleur du fond en vert
+            item.style.color = "#1D6154"; // Change la couleur du texte en vert 
+        }
+
+        const copiImage = e.target.value; //juste voir la valeur renvoie
+        console.log("copiImage", copiImage);
+
+        //genererGallery(i);
+    });
+    
+}
+
 //Affectation les noms des boutons
-stockButton[0].textContent = "Tous";
-stockButton[1].textContent = "Objets";
-stockButton[2].textContent = "Appartements";
-stockButton[3].textContent = "Hôtels & restaurants";
-console.log(stockButton); //voir ce qu'il contient
+//stockButton[0].textContent = "Tous";
+// stockButton[1].textContent = "Objets";
+// stockButton[2].textContent = "Appartements";
+// stockButton[3].textContent = "Hôtels & restaurants";
+// console.log(stockButton); //voir ce qu'il contient
 
 //Permet de change le font du couleur en vert et texte blanc des boutoun au click
-function changeColorVert(nomButton)
+/*function changeColorVert(nomButton)
 {
     let eltButton0 = document.getElementById(nomButton); //Recupere le bouton
     eltButton0.style.backgroundColor = "#1D6154"; // Change la couleur du fond en vert
@@ -83,44 +154,66 @@ function changeColorBlanc(nomButton)
 {
     let eltButton0 = document.getElementById(nomButton); //Recupere le bouton
     eltButton0.style.backgroundColor = "#ffffff"; // Change la couleur du fond en vert
-    eltButton0.style.color = "#1D6154"; // Change la couleur du texte en blanche
-}
+    eltButton0.style.color = "#1D6154"; // Change la couleur du texte en vert
+}*/
 
-//gestion de bouton "Tous", affichage de tous les photos par defaut
+/*//gestion de bouton "Tous", affichage de tous les photos par defaut
 const boutonTous = document.querySelector("#button0");
 
-boutonTous.addEventListener("click", function()
-{
-    changeColorVert("button0");
-    changeColorBlanc("button1");
-    changeColorBlanc("button2");
-    changeColorBlanc("button3");
+// boutonTous.addEventListener("click", function()
+// {
+//     changeColorVert("button0");
+//     changeColorBlanc("button1");
+//     changeColorBlanc("button2");
+//     changeColorBlanc("button3");
 
-    document.querySelector("#galleryJS").innerHTML = "";
-    genererGallery(pictures);
-});
+//     document.querySelector("#galleryJS").innerHTML = "";
+//     genererGallery(pictures);
+// });
 
-//gestion de bouton "Objet", affichage de tous les photos par defaut
-const boutonObjet = document.querySelector("#button1");
+// //gestion de bouton "Objet", affichage de tous les photos par defaut
+// const boutonObjet = document.querySelector("#button1");
 
-boutonObjet.addEventListener("click", function()
-{
-    const galleryFiltre = Array.from(picturesFiltre);
-    console.log(galleryFiltre);
+// boutonObjet.addEventListener("click", function()
+// {
+//     const galleryFiltre = Array.from(picturesFiltre);
+//     console.log(galleryFiltre);
     
-    const imageObjets = galleryFiltre.filter(function(galleryObjets)
-    {
-        const monSet = new Set(galleryObjets.name = "Objets");
-        return monSet;
-    });
+//    const imageObjets = galleryFiltre.filter(function(galleryObjets)
+//     {
+//         const monSet = new Set();
+//         let monTab = []
 
-    console.log(imageObjets);
+//         for (let i = 0; i <galleryFiltre.length; i++) 
+//         {
+//             if (galleryFiltre[i].name == 'Objets') 
+//             {
+//                 monTab = galleryFiltre[i];  
+//             }
+//         }
 
-    document.querySelector("#galleryJS").innerHTML = "";
-    genererGallery(imageObjets);
+//         for (let i = 0; i < pictures.length; i++) 
+//         {
+//             if (pictures[i].category.name == monTab.name) 
+//             {
+//                 monSet.add = pictures[i];  
+//             }
+//         }
 
-    changeColorBlanc("button0");
-    changeColorVert("button1");
-    changeColorBlanc("button2");
-    changeColorBlanc("button3");
-});
+//         //monSet.add = monTab;
+//         console.log(monTab);
+//         console.log(monSet);
+//         const montb = Array.from(monSet);
+//         return montb;
+//     });
+
+//     console.log(imageObjets);
+
+//     //document.querySelector("#galleryJS").innerHTML = "";
+//    //genererGallery(imageObjets);
+
+//     changeColorBlanc("button0");
+//     changeColorVert("button1");
+//     changeColorBlanc("button2");
+//     changeColorBlanc("button3");
+// });*/
