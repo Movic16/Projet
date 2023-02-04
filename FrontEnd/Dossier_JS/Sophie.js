@@ -104,13 +104,13 @@ for (let i = 0; i < filtresBTN.length; i++)
         e.target.style.color = "#FFFFFF"; // Change la couleur du texte en blanche*/
         e.target.style.backgroundColor = "#1D6154"; // Change la couleur du fond en vert
         
-        console.log("e", e);
+        console.log( e.target);
         const copiefiltresBTN = Array.from(filtresBTN);
         console.log("copiefiltresBTN", copiefiltresBTN);
 
         const btnNoClic = copiefiltresBTN.filter(function(selctBTN)
         {
-            console.log("selctBTN", selctBTN);
+            //console.log("selctBTN", selctBTN);
 
             if (selctBTN != e.target)
             {
@@ -126,9 +126,20 @@ for (let i = 0; i < filtresBTN.length; i++)
             item.style.color = "#1D6154"; // Change la couleur du texte en vert 
         }
 
+        const imagesCopie = Array.from(pictures);
         const copiImage = e.target.value; //juste voir la valeur renvoie
+        const imageObjets = imagesCopie.filter(function(imagefiltre)
+        {
+            //console.log("imagefiltre", imagefiltre);
+            if (imagefiltre.category.name == e.target.value) 
+            {
+                return imagefiltre;
+            } 
+        });
         console.log("copiImage", copiImage);
+        console.log("imageObjets", imageObjets);
 
+        //document.querySelector("#galleryJS").innerHTML = "";
         //genererGallery(i);
     });
     
