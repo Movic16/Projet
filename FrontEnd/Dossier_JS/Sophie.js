@@ -67,6 +67,7 @@ console.log("monSetcateg", monSetcateg);
 let buttonElement = document.createElement("button");
 buttonElement.setAttribute('id','button'+ 0); //Mettre l'attribut id sur 'button'
 buttonElement.textContent = "Tous";
+//buttonElement.setAttribute('value', buttonElement.textContent); //Mettre l'attribut value sur 'button'
 
 // Récupération de l'élément du DOM qui accueillera les fiches
 const Divfiltre = document.querySelector("#filtre");
@@ -86,6 +87,7 @@ for (const item of monSetcateg)
     buttonElement = document.createElement("button");
     buttonElement.setAttribute('id','button' + cmpt); //Mettre l'attribut id sur 'button'
     buttonElement.textContent = item;
+    buttonElement.setAttribute('value', item); //Mettre l'attribut value sur 'button'
 
     //stokage des buttons
     //stockButton[i] = buttonElement;
@@ -126,21 +128,26 @@ for (let i = 0; i < filtresBTN.length; i++)
             item.style.color = "#1D6154"; // Change la couleur du texte en vert 
         }
 
-        const imagesCopie = Array.from(pictures);
-        const copiImage = e.target.value; //juste voir la valeur renvoie
-        const imageObjets = imagesCopie.filter(function(imagefiltre)
-        {
-            //console.log("imagefiltre", imagefiltre);
-            if (imagefiltre.category.name == e.target.value) 
-            {
-                return imagefiltre;
-            } 
-        });
-        console.log("copiImage", copiImage);
-        console.log("imageObjets", imageObjets);
+        const copieImages = Array.from(pictures);
+        const copiFiltreSelct = e.target.value; //Object selectionner 
 
-        //document.querySelector("#galleryJS").innerHTML = "";
-        //genererGallery(i);
+        const imagesFiltres = copieImages.filter(function(choixImages)
+        {
+            if (choixImages.category.name == copiFiltreSelct) 
+            {
+                return choixImages;
+            } 
+            else
+            {
+                choixImages;
+            }
+        });
+
+        console.log("copiFiltreSelct", copiFiltreSelct);
+        console.log("imagesFiltres", imagesFiltres);
+
+        document.querySelector("#galleryJS").innerHTML = "";
+        genererGallery(imagesFiltres);
     });
     
 }
