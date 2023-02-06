@@ -37,7 +37,7 @@
                 </div>
 
                 <div>
-                    <form action="" method="post">
+                    <form action="" method="post" id="form">
                         <div>
                             <div id="user">
                                 <p><label for="email">E-mail</label></p>
@@ -50,11 +50,12 @@
                             </div>
 
                             <div id="Div-btn-conect">
-                                <button type="submit">Se connecter</button>
+                                <button type="button" id="btn-envoie" id="form">Se connecter</button>
                             </div>
 
                             <div id="Lien-MDP">
                                 <a href="#">Mot de passé oublié</a>
+                               <p id="Data-connected"></p>
                             </div>
                         </div>
                     </form>
@@ -71,5 +72,6 @@
 			</nav>
         </footer>
         
+        <script type = "module" src="./Dossier_JS/auth.js"></script>
     </body>
 </html>

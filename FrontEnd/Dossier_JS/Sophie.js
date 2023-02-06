@@ -67,7 +67,7 @@ console.log("monSetcateg", monSetcateg);
 let buttonElement = document.createElement("button");
 buttonElement.setAttribute('id','button'+ 0); //Mettre l'attribut id sur 'button'
 buttonElement.textContent = "Tous";
-//buttonElement.setAttribute('value', buttonElement.textContent); //Mettre l'attribut value sur 'button'
+buttonElement.setAttribute('value', buttonElement.textContent); //Mettre l'attribut value sur 'button'
 
 // Récupération de l'élément du DOM qui accueillera les fiches
 const Divfiltre = document.querySelector("#filtre");
@@ -136,18 +136,23 @@ for (let i = 0; i < filtresBTN.length; i++)
             if (choixImages.category.name == copiFiltreSelct) 
             {
                 return choixImages;
-            } 
-            else
-            {
-                choixImages;
             }
         });
 
+        if (copiFiltreSelct == "Tous")
+        {
+            document.querySelector("#galleryJS").innerHTML = "";
+            genererGallery(pictures);
+
+        }
+        else
+        {
+            document.querySelector("#galleryJS").innerHTML = "";
+            genererGallery(imagesFiltres);
+        }
+
         console.log("copiFiltreSelct", copiFiltreSelct);
         console.log("imagesFiltres", imagesFiltres);
-
-        document.querySelector("#galleryJS").innerHTML = "";
-        genererGallery(imagesFiltres);
     });
     
 }

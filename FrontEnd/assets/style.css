@@ -280,6 +280,12 @@ footer nav ul {
 	margin-top: 20px;
 }
 
+#Lien-MDP p
+{
+	margin-top: 20px;
+	color: red;
+}
+
 #Lien-MDP a
 {
 	color: #3D3D3D;
