@@ -21,10 +21,10 @@
         <header>
             <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 			<nav>
-				<ul>
+				<ul id="lienNav">
 					<li>projets</li>
 					<li>contact</li>
-					<li>login</li>
+					<li id="loginUser">login</li>
 					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 				</ul>
 			</nav>
@@ -41,12 +41,12 @@
                         <div>
                             <div id="user">
                                 <p><label for="email">E-mail</label></p>
-                                <input type="email" name="Email" id="email" placeholder=" Email">
+                                <input type="email" name="Email" id="email" placeholder="Email" required>
                             </div>
 
                             <div>
                                 <p><label for="password">Mot de passe</label></p>
-                                <input type="password" name="Password" id="password" placeholder=" Password">
+                                <input type="password" name="Password" id="password" placeholder="Password" required>
                             </div>
 
                             <div id="Div-btn-conect">
@@ -55,7 +55,7 @@
 
                             <div id="Lien-MDP">
                                 <a href="#">Mot de passé oublié</a>
-                               <p id="Data-connected"></p>
+                                <p id="Data-connected"></p>
                             </div>
                         </div>
                     </form>

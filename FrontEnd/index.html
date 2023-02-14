@@ -11,18 +11,33 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" 
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
 		<meta name="description" content="">
 		<link rel="stylesheet" href="./assets/style.css">
 	</head>
+	
 
 	<body>
+		<div id="sect-header">
+			<div  id="bar-edition">
+				<a href=""><i class="fa-sharp fa-solid fa-pen-to-square fa-lg" ></i></a>
+				<a href="#"><p>Mode édition</p></a>
+				<button>publier les changements</button>
+			</div>
+		</div>
+
 		<header>
+
 			<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 			<nav>
-				<ul>
-					<li><a href="#portfolio">projets</a></li>
-					<li><a href="#contact">contact</a></li>
-					<li><a href="authentic.html">login</a></li>
+				<ul id="lienNav">
+					<a href="#portfolio"><li>projets</li></a>
+					<a href="#contact"><li>contact</li></a>
+					<a href="#"><li id="logout">Logout</li></a>
+					<a href="authentic.html" id="lienLogin"><li id="loginUser">login</li></a>
 					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 				</ul>
 			</nav>
@@ -31,10 +46,22 @@
 		<main>
 			<section id="introduction">
 				<figure>
-					<img src="./assets/images/sophie-bluel.png" alt="">
+					<img src="./assets/images/sophie-bluel.png" alt="photo de sophie" id="js-editor">
+					<div class="editor-photo"></div>
+
+					<div id="editor-photo">
+						<a href="#" class="#"><i class="fa-sharp fa-solid fa-pen-to-square fa-lg"></i></a>
+						<a href="#" class="#"><p >modifier</p></a>
+					</div>
 				</figure>
 
 				<article>
+
+					<div id="editor-parag">
+						<a href="#" class="#"><i class="fa-sharp fa-solid fa-pen-to-square fa-lg"></i></a>
+						<a href="#" class="#"><p >modifier</p></a>
+					</div>
+
 					<h2>Designer d'espace</h2>
 					<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 					<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
@@ -43,15 +70,23 @@
 			</section>
 
 			<section id="portfolio">
-				<h2>Mes Projets</h2>
 
-				<!--Partie filtre-->
+				<div id="editor-gallery">
+					<h2>Mes Projets</h2>
+
+					<span id="spamBtnEdito">
+						<a href="#fenetreModalgallery" class="button-modal" value="iconModalgallery"><i class="fa-sharp fa-solid fa-pen-to-square fa-lg"></i></a>
+						<a href="#fenetreModalgallery" class="button-modal"><p >modifier</p></a>
+					</span>
+				</div>
+
+				<!--Partie filtre!-->
 				<div id="filtre">
 					<!--les buttons-->
 				
 				</div>
 
-				<!--Ajout dynamiquement des galerie-->
+				<!--Ajout dynamiquement des galerie!-->
 				<div id="galleryJS" class="gallery">
 
 					<!-- 
@@ -109,6 +144,56 @@
 						<figcaption>Hotel First Arte - New Delhi</figcaption>
 					</figure> -->
 				</div>
+
+				<!--Partie modal!-->
+				<aside id="fenetreModalgallery">
+				</aside>
+
+				<!-- <aside id="fenetreModalgallery" class="fenetModal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal">
+					<div class="galeryModal">
+						<a href="#" id="lienCloseModal"><i class="fa-sharp fa-solid fa-xmark fa-lg"></i></a>
+						<h3 id="titlemodal">Galerie photo</h3>
+							
+						
+
+					</div>
+				</aside> !-->
+
+				<!--
+				<form action="" method="post" id="fromFichier">
+					
+					<div id="envoiFichier">
+						<div id="rectFile">
+							<p id="pI"><i class="fa-sharp fa-regular fa-image fa-lg"></i></p>
+							<p id="pLabel"><label for="file" id="labFile">+ Ajouter photo</label></p>
+							<input type="file" name="file" id="file" accept=".jpg, .png" alt="fichier" size="4000000" required></input>
+							<p id="pInf">jpg, png: 4mo max</p>
+						</div>
+					</div>
+
+					<div id="elementFile">
+						<div>
+							<p><label for="titre">Titre</label></p>
+							<input type="text" name="titre" id="titre" placeholder="Titre" required>
+						</div>
+
+						<div>
+							<p><label for="categorie">Categorie</label></p>
+							<input list="ListCategorie" name="categorie" id="categorie" placeholder="categorie" required>
+						</div>
+					</div>
+
+					<div id="list-categorie">
+						<datalist id="ListCategorie">
+							<option value="Objet">
+						</datalist>
+					</div>
+
+					<div id="btn-File">
+						<button type="button" id="btn-envoiFile" id="form">Valider</button>
+					</div>
+				</form>!-->
+
 			</section>
 
 			<section id="contact">

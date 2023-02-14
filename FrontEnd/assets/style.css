@@ -239,6 +239,14 @@ footer nav ul {
 
 #connected > div:nth-child(2)
 {
+	/*text-align: center;*/
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#Div-btn-conect, #Lien-MDP
+{
 	text-align: center;
 }
 
@@ -275,6 +283,18 @@ footer nav ul {
     cursor: pointer;
 }
 
+#lienNav a
+{
+	text-decoration-line: none;
+	color: #000;
+}
+
+#lienNav li:active
+{
+	font-weight: bold;
+	line-height: 20px;
+}
+
 #Lien-MDP
 {
 	margin-top: 20px;
@@ -308,7 +328,526 @@ footer nav ul {
 	margin-top: 360px;
 }
 
-/*ul logo:active
+/******Mode editeur******/
+#sect-header
 {
-	font-weight: bold;
-}*/
+	display: none;
+}
+
+#bar-edition
+{
+	width: 1440px;
+	height: 60px;
+	color: #ffffff;
+	background: #000000;
+
+	font-family: 'Work Sans';
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 19px;
+	text-align: center;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+body > #sect-header
+{
+	margin: 0px;
+}
+
+#sect-header a
+{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+#sect-header i, #sect-header p
+{
+	margin-right: 10px;
+}
+
+#sect-header p
+{
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 19px;
+	color: #FFFFFF;
+}
+
+#sect-header button
+{
+	width: 200px;
+	height: 40px;
+
+	margin-left: 10px;
+	cursor: pointer;
+
+	background: #FFFFFF;
+	border-radius: 60px;
+	border: none;
+
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	text-align: center;
+}
+
+#editor-photo
+{
+	margin-top: 15px;
+	margin-left: 60px;
+}
+
+#editor-parag
+{
+	margin-bottom: 15px;
+	margin-left: 0px;
+}
+
+#editor-photo, #editor-parag
+{
+	display: none;
+	align-items: center;
+	justify-content:flex-start;
+
+	font-family: 'Work Sans';
+	font-weight: 400px;
+	font-size: 14px;
+	line-height: 16px;
+}
+
+#editor-photo p, #editor-parag p
+{
+	margin-left: 10px;
+	margin-bottom: 0em;
+}
+
+#editor-photo a, #editor-parag a
+{
+	text-decoration: none;
+	color: #000;
+}
+
+#editor-gallery, #spamBtnEdito
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	text-align: center;
+}
+
+#editor-gallery a
+{
+	text-decoration: none;
+	color: #000;
+
+	margin-top: 5px;
+	margin-left: 10PX;
+}
+
+#editor-gallery a > p
+{
+	font-family: 'Work Sans';
+	font-weight: 400px;
+	font-size: 14px;
+	line-height: 16px;
+}
+
+#editor-gallery h2
+{
+	margin-bottom: 0em;
+	margin-right: 10px;
+}
+
+#spamBtnEdito
+{
+	display: none;
+	justify-content: center;
+}
+
+/******Logout*****/
+
+#logout
+{
+	display: none;
+}
+
+/****Partie modal******************/
+.galeryModal h3
+{
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 26px;
+	line-height: 30px;
+	text-align: center;
+}
+
+
+.IconMod
+{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.IconMod a
+{
+	text-decoration: none;
+	color: #000;
+}
+
+#lienCloseModal 
+{
+	/* margin-left: 600px; */
+	color: #000;
+}
+
+#lienCloseModal :hover
+{
+	color: #f00c0c;
+}
+
+#lienRetourModal
+{
+	/*display: none;*/
+	visibility: hidden;
+}
+
+#lienRetourModal :hover
+{
+	color: #09d828;
+}
+
+.fenetModal
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.3);
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: fadIn .4s both;
+}
+
+.fenetModal[aria-hidden="true"]
+{
+	animation-name: fadeOut;
+}
+
+.fenetModal[aria-hidden="true"].galeryModal
+{
+	animation-name: slideFromBettom;
+}
+
+
+@keyframes fadeIn
+{
+	form{ opacity: 0;}
+	to{opacity: 1;}
+}
+
+@keyframes fadeOut
+{
+	form{ opacity: 1;}
+	to{opacity: 0;}
+}
+
+#fenetreModalgallery
+{
+	display: none;
+}
+
+.galeryModal
+{
+	width: 640px;
+	height: 760px;
+
+	background: #FFFFFF;
+	border-radius: 10px;
+	padding: 40px;
+
+	animation: slideFromTop .4s both;
+
+	/* text-align: center;
+	justify-content: center; */
+}
+
+@keyframes slideFromTop
+{
+	form{ transform: translateY(-50px);}
+	to{ transform: translateY(0px);}
+}
+
+@keyframes slideFromBettom
+{
+	form{ transform: translateY(0px);}
+	to{ transform: translateY(50px);}
+}
+
+#galleryJSModal
+{
+	width: 90%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+	padding-left: 30px;
+}
+
+#galleryJSModal img {
+    width: 100%;
+}
+
+.iconPoub
+{
+	width: 30px;
+	height: 30px;
+
+	background: #000000;
+	border-radius: 5px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	position: absolute;
+	margin-top: -140px;
+	margin-left: 60px;
+	
+}
+
+.iconPoub a
+{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.iconPoub i
+{
+	color: #FFFFFF ;
+	cursor: pointer;
+}
+
+.inconfleches
+{
+	width: 30px;
+	height: 30px;
+
+	background: #000000;
+	border-radius: 5px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	position: absolute;
+	margin-top: -140px;
+	margin-left: 25px;
+	
+}
+
+.inconfleches a
+{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.inconfleches i
+{
+	color: #FFFFFF ;
+	cursor: pointer;
+}
+
+#btnModal
+{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.sepligne
+{
+	width: 420px;
+	border: 1px solid #B3B3B3;
+
+	margin-bottom: 40px;
+}
+
+#btnModal #btn-ajoutPicture
+{
+	width: 240px;
+	height: 40px;
+	border: none;
+	background: #1D6154;
+	border-radius: 60px;
+
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	color: #FFFFFF;
+
+	margin-bottom: 30px;
+	cursor: pointer;
+}
+
+#btnModal a
+{
+	text-decoration: none;
+	font-family: 'Syne';
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+
+	color: #D65353;
+	display: flex;
+}
+
+/***element focusable***/
+*:focus
+{
+	box-shadow: 0 0 10px red;
+}
+
+/***envoie fichier***/
+#file
+{
+	display: none;
+}
+
+#envoiFichier 
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 20px;
+}
+
+#rectFile
+{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+
+	width: 400px;
+	height: 170px;
+
+	background: #E8F1F7;
+	border-radius: 3px;
+}
+
+ #rectFile #pI
+{
+	margin-top: 35px;
+}
+
+#rectFile label
+{
+	width: 170px;
+	height: 35px;
+
+	background: #CBD6DC;
+	border-radius: 50px;
+
+	font-family: 'Work Sans';
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	text-align: center;
+	color: #306685;
+	padding: 10px;
+}
+
+#rectFile #pLabel
+{
+	margin-top: 30px;
+}
+
+#rectFile #pInf
+{
+	margin-top: 20px;
+
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 10px;
+	line-height: 12px;
+
+	text-align: center;
+	color: #444444;
+}
+
+#elementFile
+{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 40px;
+}
+
+#elementFile #titre
+{
+	width: 420px;
+	height: 40px;
+	border: none;
+	background: #FFFFFF;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#elementFile p
+{
+	padding-bottom: 10px;
+}
+
+#elementFile #categorie
+{
+	width: 420px;
+	height: 40px;
+	border: none;
+	background: #FFFFFF;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#elementFile > div:nth-child(2)
+{
+	margin-top: 30px;
+}
+
+#btn-File
+{
+	text-align: center;
+}
+
+#btnModal #btn-envoiFile
+{
+	width: 240px;
+	height: 40px;
+	border: none;
+	background: #A7A7A7;
+	border-radius: 60px;
+
+	font-family: 'Syne';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 17px;
+
+	text-align: center;
+	color: #FFFFFF;
+}
