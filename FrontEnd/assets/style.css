@@ -851,3 +851,13 @@ body > #sect-header
 	text-align: center;
 	color: #FFFFFF;
 }
+
+#massageFile
+{
+	font-family: 'Syne';
+	font-size: 13px;
+	line-height: 15px;
+	text-align: center;
+	color: red;
+	margin-top: 20px;
+}

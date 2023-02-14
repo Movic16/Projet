@@ -378,7 +378,75 @@ const openModal = function (e)
 
         document.querySelector("#btnModal").innerHTML = "";
         btnValidAjoutPicture();
+        VerifieDataFile();
+
     });
+
+    //Selection le retour aux gallery modal
+    const btnRetourModal = modal.querySelector('#lienRetourModal')
+    btnRetourModal.addEventListener('click', function()
+    {
+        document.querySelector("#titlemodal").textContent = "Galerie photo";
+        document.querySelector(".galeryModal").style.height = "760px";
+
+        document.querySelector("#galleryJSModal").innerHTML = "";
+        document.querySelector("#galleryJSModal").style.display = "grid";
+        genererGallery(pictures, idgalleryJSModal);
+        remplaceTitrePictures();  
+        ajoutIconeImage();
+        
+        document.querySelector("#sectiBtnModal").innerHTML = "";
+        btnAjoutSupModal();
+        document.querySelector("#supprimerImages").style.display = "flex";
+        
+        document.querySelector("#lienRetourModal").style.visibility = "hidden";
+    });
+}
+
+function VerifieDataFile() 
+{
+    const fileInput = document.querySelector('input[type="file"]');
+    const messagFile = document.querySelector('#massageFile');
+
+    fileInput.addEventListener('change', () => {
+        validSize();
+    })
+
+    //Validation size image
+    function validSize() 
+    {
+        const dtatFile = fileInput.files[0];
+
+        if(!dtatFile)
+        {
+            const erreur = new Error('Aucun Image selectionner')
+            console.log("messagFile",erreur);
+            messagFile.textContent = erreur;
+            messagFile.style.color ='red';
+
+            return erreur;
+        }
+
+        const limit = 4000;
+        const DataSize = dtatFile.size /1024;
+
+        if(DataSize > limit)
+        {
+            const erreur = new Error(`Image dépasse la taille : ${(DataSize/1000).toFixed(2)} mo autoriser`)
+            console.log("messagFile",erreur);
+            messagFile.textContent = erreur;
+            messagFile.style.color ='red';
+
+            return erreur;
+        }
+        else
+        {
+            console.log("Image Ok");
+            messagFile.textContent = '';
+            return false;
+        }
+
+    }
 }
 
 //Permet de remplecer les titre d'image
@@ -709,6 +777,14 @@ function btnValidAjoutPicture()
 
     //Rattachement du balise button a son parent div
     selectbtnModal.appendChild(btnAjoutValImageModal);
+
+    //Creation du p
+    const pMessagefile = document.createElement("p");
+    pMessagefile .setAttribute('id','massageFile');
+    //pMessagefile.textContent = "error";
+
+    //Rattachement du balise button a son parent div
+    selectbtnModal.appendChild(pMessagefile);
 }
 
 //Permet de stopper la propagtion
@@ -736,6 +812,9 @@ const closeModal = function(e)
     modal.removeEventListener('click', closeModal);
     modal.querySelector("#lienCloseModal").removeEventListener('click', closeModal);
     modal.querySelector(".lienStopPop").removeEventListener('click', stopPropagation);
+
+    modal.querySelector('#btn-ajoutPicture').removeEventListener('click', closeModal);
+    modal.querySelector('#lienRetourModal').removeEventListener('click', closeModal);
     //modal =null;
 
     /*const selctgalleryJSMod = document.querySelector(".galleryJSModal");
