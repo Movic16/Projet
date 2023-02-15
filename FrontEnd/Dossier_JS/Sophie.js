@@ -523,12 +523,13 @@ function VerifieDataFile()
         
     }
 
+    //On ecoute le changement de titre et categorie
     titreImage.addEventListener('input', event =>{
         return event.target.value.length;
     })
 
     categoImage.addEventListener('input', event =>{
-        return event.target.value.length;
+        return event.target.value.length;s
     })
 
     console.log("titreImage", titreImage.value);
