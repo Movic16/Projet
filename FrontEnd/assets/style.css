@@ -792,6 +792,18 @@ body > #sect-header
 	color: #444444;
 }
 
+#rectFile #figVisulImage
+{
+	display: none;
+}
+
+#figVisulImage img
+{
+	width: 255px;
+	height: 170px;
+	object-fit: contain;
+}
+
 #elementFile
 {
 	display: flex;
@@ -813,6 +825,14 @@ body > #sect-header
 #elementFile p
 {
 	padding-bottom: 10px;
+}
+
+#elementFile p label
+{
+	font-family: 'Work Sans';
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
 }
 
 #elementFile #categorie

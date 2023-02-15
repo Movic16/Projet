@@ -371,14 +371,17 @@ const openModal = function (e)
     const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
     btnAjoutImage.addEventListener('click', function()
     {
-        document.querySelector(".galeryModal").style.height = "600px";
+        if(modal != null)
+        {
+            document.querySelector(".galeryModal").style.height = "600px";
 
-        document.querySelector("#galleryJSModal").innerHTML = "";
-        ajouterImages();
+            document.querySelector("#galleryJSModal").innerHTML = "";
+            ajouterImages();
 
-        document.querySelector("#btnModal").innerHTML = "";
-        btnValidAjoutPicture();
-        VerifieDataFile();
+            document.querySelector("#btnModal").innerHTML = "";
+            btnValidAjoutPicture();
+            VerifieDataFile();
+        }
 
     });
 
@@ -403,21 +406,58 @@ const openModal = function (e)
     });
 }
 
+//Verifier les donner avant d'envoie les images
 function VerifieDataFile() 
 {
     const fileInput = document.querySelector('input[type="file"]');
     const messagFile = document.querySelector('#massageFile');
 
-    fileInput.addEventListener('change', () => {
-        validSize();
-    })
+    const titreImage = document.getElementById('titre');
+    const categoImage = document.getElementById('categorie');
+
+    const elementForm = document.getElementById('fromFichier');
+    console.log("elementForm", elementForm);
+    const validBtnFile = document.querySelector('#btn-envoiFile');
+    const verifImageVu = document.getElementById('ImgVisul');
+
+    const fileTypes = ['image/jpg','image/png', 'image/jpeg'];
+    const formData = new FormData();
+
+    console.log("fileInput", fileInput.files);
+    //Importe image
+    fileInput.addEventListener('change', function() {
+
+        console.log("fileInput", fileInput.files);
+        //validSize(); //verifie la taille
+
+        if (validSize(fileInput.files[0]) == true && validFileType(fileInput.files[0]) == true) 
+        {
+            const analiseImageVisul = new FileReader();
+
+            document.getElementById('pI').style.display = "none";
+            document.getElementById('pLabel').style.display = "none";
+            document.getElementById('pLabel').style.display = "none";
+            document.getElementById('pInf').style.display = "none";
+            document.getElementById('figVisulImage').style.display = "flex";
+            const imgeVisul = document.getElementById('ImgVisul');
+
+            analiseImageVisul.readAsDataURL(fileInput.files[0]);
+            analiseImageVisul.addEventListener('load', function()
+            {
+                imgeVisul.setAttribute('src', this.result);
+            })
+        }
+        console.log("fileInput", fileInput.files);
+        //console.log("validSize",  validSize());
+        //console.log("validFileType",   validFileType(fileInput.files[0]));
+    });
 
     //Validation size image
-    function validSize() 
+    function validSize(fileSize) 
     {
-        const dtatFile = fileInput.files[0];
+        //const dtatFile = fileInput.files[0];
 
-        if(!dtatFile)
+        if(  !fileSize /*!dtatFile*/)
         {
             const erreur = new Error('Aucun Image selectionner')
             console.log("messagFile",erreur);
@@ -428,11 +468,11 @@ function VerifieDataFile()
         }
 
         const limit = 4000;
-        const DataSize = dtatFile.size /1024;
+        const DataSize = fileSize.size /1024; /*dtatFile.size /1024;*/
 
         if(DataSize > limit)
         {
-            const erreur = new Error(`Image dépasse la taille : ${(DataSize/1000).toFixed(2)} mo autoriser`)
+            const erreur = new Error(`Image dépasse la taille : ${(DataSize/1000).toFixed(2)} mo autoriser 4 mo`)
             console.log("messagFile",erreur);
             messagFile.textContent = erreur;
             messagFile.style.color ='red';
@@ -441,12 +481,119 @@ function VerifieDataFile()
         }
         else
         {
-            console.log("Image Ok");
+            console.log("Image size Ok");
             messagFile.textContent = '';
-            return false;
+            //validFileType(dtatFile);
+            return true;
         }
 
     }
+
+    //Validation Type images
+    function validFileType(file) 
+    {
+        //const TypeFile = fileInput.files[0];
+        let cmptType = 0;
+        
+        for (let i = 0; i < fileTypes.length; i++) 
+        {
+            cmptType ++;
+
+            if (file.type == fileTypes[i]) 
+            {
+                console.log("Type image ok");
+                messagFile.textContent = "";
+
+                return true;
+            }
+        }
+
+        console.log("fileTypes", fileTypes);
+        console.log("cmptType", cmptType);
+
+        if(cmptType == fileTypes.length)
+        {
+            const erreur = new Error(`Le type : ${(file.type)} n'est pas autoriser, Types autorise : jpg et png.`)
+            console.log("messagFile",erreur);
+            messagFile.textContent = erreur;
+            messagFile.style.color ='red';
+
+            return erreur;
+        }
+        
+    }
+
+    titreImage.addEventListener('input', event =>{
+        return event.target.value.length;
+    })
+
+    categoImage.addEventListener('input', event =>{
+        return event.target.value.length;
+    })
+
+    console.log("titreImage", titreImage.value);
+    console.log("categoImage", categoImage.value);
+    console.log(" verifImageVu",  verifImageVu.src);
+
+    //Verifie si la case titre et categrie ne sont pas vide
+    if (titreImage.value != null && categoImage.value != null && fileInput.files[0] !=null)
+    {
+        validBtnFile.removeAttribute("disabled");
+        validBtnFile.style.background ="#1D6154";
+
+        validBtnFile.addEventListener('click',function()
+        {
+            console.log("Envoie en cours...");
+            messagFile.textContent = "Envoie en cours...";
+            messagFile.style.color ='green';
+
+            formData.append("title", titreImage);
+        });
+
+        console.log("formData",formData);
+    }
+    else
+    {
+        document.querySelector('#btn-envoiFile').setAttribute("disabled","");
+        document.querySelector('#btn-envoiFile').style.background ="#A7A7A7";
+    }
+
+
+
+    //Envoie image a l'API
+    function EnvoieImageAPI() 
+    {
+        //convertir les donnees en json
+        const convertFormData = Object.fromEntries(formData);
+        const payload = JSON.stringify(convertFormData);
+        console.log("payload",payload);
+
+        const ajoutImageURL = fetch('http://localhost:5678/api/works',
+        {
+            method : "POST",
+            body : payload,
+            headers :{"Content-Type" : "application/json",},
+        })
+        .then(response => {
+
+            if(response.ok)
+            {
+                console.log("L'image est envoyer avec sucés");
+                messagFile.textContent = "L'image est envoyer avec sucés";
+                messagFile.style.color ='green';
+
+                return response.json();
+            }
+            else
+            {
+                alert("HTTP-Error: " + connectPost.status);
+            }
+        })
+        .then(result => {
+        })  
+    }
+
+
 }
 
 //Permet de remplecer les titre d'image
@@ -653,6 +800,22 @@ function ajouterImages()
     //Rattachement du balise input  a son parent divRectFileAjouterImages
     divRectFileAjouterImages.appendChild(inputFile);
 
+    //Creation de balise figureVisulImage
+    const figureVisulImage = document.createElement("figure");
+    figureVisulImage.setAttribute('id','figVisulImage');
+
+    //Rattachement du balise pVisulImage  a son parent divRectFileAjouterImages
+    divRectFileAjouterImages.appendChild( figureVisulImage);
+
+    //Creation de balise img pour la visulisation de l'image
+    const visulImage = document.createElement("img");
+    visulImage.setAttribute('src','');
+    visulImage.setAttribute('alt','img prev');
+    visulImage.setAttribute('id','ImgVisul');
+
+    //Rattachement du balise img visul  a son parent divRectFileAjouterImages
+    figureVisulImage.appendChild(visulImage);
+
     //Creation de balise pInf
     const pInf = document.createElement("p");
     pInf.setAttribute('id','pInf');
@@ -693,7 +856,8 @@ function ajouterImages()
     inputTitre.setAttribute('type','text');
     inputTitre.setAttribute('name','titre');
     inputTitre.setAttribute('id','titre');
-    inputTitre.setAttribute('placeholder','Titre');
+    //inputTitre.setAttribute('value','titre');
+    //inputTitre.setAttribute('placeholder','Titre');
     inputTitre.setAttribute('required','');
 
     //Rattachement du balise inputTitre a son parent pTitre
@@ -724,7 +888,8 @@ function ajouterImages()
     inputCategorie.setAttribute('list','ListCategorie');
     inputCategorie.setAttribute('name','categorie');
     inputCategorie.setAttribute('id','categorie');
-    inputCategorie.setAttribute('placeholder','Categorie');
+    //inputCategorie.setAttribute('value','categorie');
+    //inputCategorie.setAttribute('placeholder','Categorie');
     inputCategorie.setAttribute('required','');
 
     //Rattachement du balise inputCategorie a son parent divelementFilechildDeux
@@ -813,8 +978,8 @@ const closeModal = function(e)
     modal.querySelector("#lienCloseModal").removeEventListener('click', closeModal);
     modal.querySelector(".lienStopPop").removeEventListener('click', stopPropagation);
 
-    modal.querySelector('#btn-ajoutPicture').removeEventListener('click', closeModal);
-    modal.querySelector('#lienRetourModal').removeEventListener('click', closeModal);
+    //modal.querySelector('#btn-ajoutPicture').removeEventListener('click', closeModal);
+    //modal.querySelector('#lienRetourModal').removeEventListener('click', closeModal);
     //modal =null;
 
     /*const selctgalleryJSMod = document.querySelector(".galleryJSModal");
@@ -825,9 +990,26 @@ const closeModal = function(e)
     {
         modal.style.display = 'none';
         modal.removeEventListener('animationend', hideModal);
-        modal =null;
+        modal = null;
+        console.log("modal", modal);
     }
     modal.addEventListener('animationend', hideModal);
+
+    //Si on est a la page ajouter image et on ferme la modal
+    document.querySelector("#titlemodal").textContent = "Galerie photo";
+    document.querySelector(".galeryModal").style.height = "760px";
+
+    document.querySelector("#galleryJSModal").innerHTML = "";
+    document.querySelector("#galleryJSModal").style.display = "grid";
+    genererGallery(pictures, idgalleryJSModal);
+    remplaceTitrePictures();  
+    ajoutIconeImage();
+    
+    document.querySelector("#sectiBtnModal").innerHTML = "";
+    btnAjoutSupModal();
+    document.querySelector("#supprimerImages").style.display = "flex";
+    
+    document.querySelector("#lienRetourModal").style.visibility = "hidden";
 }
 
 const focusInModal = function (e)
