@@ -872,6 +872,11 @@ body > #sect-header
 	color: #FFFFFF;
 }
 
+#btn-envoiFile :disabled
+{
+	background: #A7A7A7;
+}
+
 #massageFile
 {
 	font-family: 'Syne';

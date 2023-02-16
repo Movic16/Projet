@@ -417,6 +417,7 @@ function VerifieDataFile()
 
     const elementForm = document.getElementById('fromFichier');
     console.log("elementForm", elementForm);
+
     const validBtnFile = document.querySelector('#btn-envoiFile');
     const verifImageVu = document.getElementById('ImgVisul');
 
@@ -445,6 +446,7 @@ function VerifieDataFile()
             analiseImageVisul.addEventListener('load', function()
             {
                 imgeVisul.setAttribute('src', this.result);
+                autoBtnValid();
             })
         }
         console.log("fileInput", fileInput.files);
@@ -523,47 +525,88 @@ function VerifieDataFile()
         
     }
 
+    
+    let copieTitreImg;
     //On ecoute le changement de titre et categorie
-    titreImage.addEventListener('input', event =>{
-        return event.target.value.length;
-    })
+    titreImage.addEventListener('input', function(event)
+    {
+        copieTitreImg = event.target.value;
+        console.log("copieTitreImg", copieTitreImg);
+        autoBtnValid();
+        return;
+    });
+    //console.log("copieTitreImg", copieTitreImg);
 
-    categoImage.addEventListener('input', event =>{
-        return event.target.value.length;s
-    })
+    let copiCategImg;
+    categoImage.addEventListener('input', function(event)
+    {
+        copiCategImg = event.target.value;
+        console.log("copiCategImg", copiCategImg);
+        autoBtnValid();
+        return;
+    });
 
     console.log("titreImage", titreImage.value);
     console.log("categoImage", categoImage.value);
     console.log(" verifImageVu",  verifImageVu.src);
 
-    //Verifie si la case titre et categrie ne sont pas vide
-    if (titreImage.value != null && categoImage.value != null && fileInput.files[0] !=null)
-    {
-        validBtnFile.removeAttribute("disabled");
-        validBtnFile.style.background ="#1D6154";
 
-        validBtnFile.addEventListener('click',function()
+    function autoBtnValid()
+    {
+        const copiFilImg = fileInput.files;
+        const recupImageFile = Array.from(copiFilImg);
+
+        console.log("copieTitreImg", copieTitreImg);
+        console.log("recupImageFile",  recupImageFile);
+        console.log("copiCategImg", copiCategImg);
+
+        /*if(copieTitreImg == null || copiCategImg == null || recupImageFile.length == null)
         {
-            console.log("Envoie en cours...");
-            messagFile.textContent = "Envoie en cours...";
-            messagFile.style.color ='green';
+            document.querySelector("#btnModal").innerHTML = "";
+            btnValidAjoutPicture();
+        }*/
 
-            formData.append("title", titreImage);
-        });
+        //Verifie si la case titre et categrie ne sont pas vide
+        if (copieTitreImg != null && copiCategImg != null &&  recupImageFile.length > 0)
+        {
+            validBtnFile.removeAttribute("disabled");
+            validBtnFile.style.background ="#1D6154";
 
-        console.log("formData",formData);
+            validBtnFile.addEventListener('click',function()
+            {
+                console.log("Envoie en cours...");
+                messagFile.textContent = "Envoie en cours...";
+                messagFile.style.color ='green';
+
+                formData.append("image", recupImageFile);
+                formData.append("title", titreImage);
+                formData.append("categorie", copiCategImg);
+                EnvoieImageAPI();
+            });
+
+            console.log("formData",formData);
+        }
+        else
+        {
+            validBtnFile.setAttribute("disabled","");
+            validBtnFile.style.background ="#A7A7A7";
+
+            /*document.addEventListener("load", () =>{
+
+                validBtnFile.setAttribute("disabled","");
+                validBtnFile.style.background ="#A7A7A7";
+            });
+
+            document.querySelector("#btnModal").innerHTML = "";
+            btnValidAjoutPicture();*/
+        }
     }
-    else
-    {
-        document.querySelector('#btn-envoiFile').setAttribute("disabled","");
-        document.querySelector('#btn-envoiFile').style.background ="#A7A7A7";
-    }
-
 
 
     //Envoie image a l'API
     function EnvoieImageAPI() 
     {
+        //const monTokenAuth = await localStorage.getItem('Tokens');
         //convertir les donnees en json
         const convertFormData = Object.fromEntries(formData);
         const payload = JSON.stringify(convertFormData);
@@ -573,7 +616,7 @@ function VerifieDataFile()
         {
             method : "POST",
             body : payload,
-            headers :{"Content-Type" : "application/json",},
+            headers :{"Content-Type" : "application/json", "Authorization" : localStorage.getItem('Tokens'),},
         })
         .then(response => {
 
@@ -595,6 +638,12 @@ function VerifieDataFile()
     }
 
 
+}
+
+//suppresion des images sur Api
+function supprimerWork() 
+{
+    
 }
 
 //Permet de remplecer les titre d'image
@@ -938,7 +987,7 @@ function btnValidAjoutPicture()
     const btnAjoutValImageModal = document.createElement("button");
     btnAjoutValImageModal.setAttribute('type','button');
     btnAjoutValImageModal.setAttribute('id','btn-envoiFile');
-    btnAjoutValImageModal.setAttribute('disabled','');
+    //btnAjoutValImageModal.setAttribute('disabled','');
     btnAjoutValImageModal.textContent = "Valider";
 
     //Rattachement du balise button a son parent div
