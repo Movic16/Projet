@@ -626,15 +626,16 @@ function VerifieDataFile()
         console.log("convertFormData",convertFormData);
 
         const payload = JSON.stringify(convertFormData);
-        console.log("payload",payload);
+        console.log("payload", payload);
+        console.log("monToken", monToken);
 
         const ajoutImageURL = await fetch('http://localhost:5678/api/works',
         {
             method : "POST",
             body : formData,
             headers :{  
-                        /*"Content-Type" : "multipart/form-data",*/
-                        "Authorization": "Bearer" + monToken,
+                        //"Content-Type" : "multipart/form-data",
+                        "Authorization":"Bearer" + monToken, //localStorage.getItem('Tokens')>,
                     },
         })
         .then(response => {
@@ -654,9 +655,9 @@ function VerifieDataFile()
                 messagFile.style.color ='red';
                 //alert("HTTP-Error: " + connectPost.status);
             }
+        })
+        .then(result => {
         });
-        /*.then(result => {
-        }) */ 
     }
 
 }
