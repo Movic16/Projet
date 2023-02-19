@@ -386,7 +386,7 @@ const openModal = function (e)
             //e.stopPropagation();
         }
         //console.log(" e.target", e.target);
-        btnAjoutImage.removeEventListener("click",btnAjoutImage.addEventListener);
+       // btnAjoutImage.removeEventListener("click",btnAjoutImage.addEventListener);
     });
 
     //Selection le retour aux gallery modal
@@ -608,7 +608,6 @@ function VerifieDataFile()
     //Envoie image a l'API
     async function EnvoieAjoutImageAPI() 
     {
-        
         let formData = new FormData();
         //const Data = Object.fromEntries(formData);
         //console.log("copieTitreImg", copieTitreImg);
