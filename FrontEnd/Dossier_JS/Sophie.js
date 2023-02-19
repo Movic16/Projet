@@ -52,7 +52,7 @@ function genererGallery(pictures, idValue)
         figureElement.appendChild(imageElement);
 
         // Ajout de l'en-tête du ballise figure puis les images
-        document.querySelector('#'+idValue).appendChild(figureElement)
+        document.querySelector('#'+ idValue).appendChild(figureElement)
                                             .appendChild(figcaptionElement);
     } 
 }
@@ -366,11 +366,13 @@ const openModal = function (e)
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     previouslyFocusedElement = document.querySelector(' :focus');
     focusables[0].focus();
+    supprimerWork();
 
     //Selection le boutou ajouter une photo
     const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
-    btnAjoutImage.addEventListener('click', function()
+    btnAjoutImage.addEventListener('click', function(e)
     {
+        
         if(modal != null)
         {
             document.querySelector(".galeryModal").style.height = "600px";
@@ -381,8 +383,10 @@ const openModal = function (e)
             document.querySelector("#btnModal").innerHTML = "";
             btnValidAjoutPicture();
             VerifieDataFile();
+            //e.stopPropagation();
         }
-
+        //console.log(" e.target", e.target);
+        btnAjoutImage.removeEventListener("click",btnAjoutImage.addEventListener);
     });
 
     //Selection le retour aux gallery modal
@@ -403,6 +407,8 @@ const openModal = function (e)
         document.querySelector("#supprimerImages").style.display = "flex";
         
         document.querySelector("#lienRetourModal").style.visibility = "hidden";
+        supprimerWork();
+        
     });
 }
 
@@ -422,7 +428,6 @@ function VerifieDataFile()
     const verifImageVu = document.getElementById('ImgVisul');
 
     const fileTypes = ['image/jpg','image/png', 'image/jpeg'];
-    const formData = new FormData();
 
     console.log("fileInput", fileInput.files);
     //Importe image
@@ -525,7 +530,6 @@ function VerifieDataFile()
         
     }
 
-    
     let copieTitreImg;
     //On ecoute le changement de titre et categorie
     titreImage.addEventListener('input', function(event)
@@ -550,46 +554,39 @@ function VerifieDataFile()
     console.log("categoImage", categoImage.value);
     console.log(" verifImageVu",  verifImageVu.src);
 
-
+    let copieImage;
     function autoBtnValid()
     {
         const copiFilImg = fileInput.files;
         const recupImageFile = Array.from(copiFilImg);
+        copieImage = recupImageFile;
+
 
         console.log("copieTitreImg", copieTitreImg);
         console.log("recupImageFile",  recupImageFile);
         console.log("copiCategImg", copiCategImg);
 
-        /*if(copieTitreImg == null || copiCategImg == null || recupImageFile.length == null)
-        {
-            document.querySelector("#btnModal").innerHTML = "";
-            btnValidAjoutPicture();
-        }*/
-
         //Verifie si la case titre et categrie ne sont pas vide
-        if (copieTitreImg != null && copiCategImg != null &&  recupImageFile.length > 0)
+        if (copieTitreImg != null && copiCategImg != undefined &&  recupImageFile.length > 0)
         {
             validBtnFile.removeAttribute("disabled");
             validBtnFile.style.background ="#1D6154";
 
+            //Pour le bouton valider ajouter imange dans l'api
             validBtnFile.addEventListener('click',function()
             {
                 console.log("Envoie en cours...");
                 messagFile.textContent = "Envoie en cours...";
                 messagFile.style.color ='green';
-
-                formData.append("image", recupImageFile);
-                formData.append("title", titreImage);
-                formData.append("categorie", copiCategImg);
-                EnvoieImageAPI();
+                EnvoieAjoutImageAPI();
             });
-
-            console.log("formData",formData);
         }
-        else
+        /*else
         {
-            validBtnFile.setAttribute("disabled","");
             validBtnFile.style.background ="#A7A7A7";
+            validBtnFile.setAttribute="disabled";
+            document.querySelector('#btnModal > #btn-envoiFile').setAttribute="disabled";
+            //validBtnFile.style.visibility ="hidden";
 
             /*document.addEventListener("load", () =>{
 
@@ -598,25 +595,48 @@ function VerifieDataFile()
             });
 
             document.querySelector("#btnModal").innerHTML = "";
-            btnValidAjoutPicture();*/
+            btnValidAjoutPicture();*
+        }*/
+
+        if (copieTitreImg == "" || copiCategImg == "") 
+        {
+            validBtnFile.style.background ="#A7A7A7";
+            validBtnFile.setAttribute("disabled","");
         }
     }
 
-
     //Envoie image a l'API
-    function EnvoieImageAPI() 
+    async function EnvoieAjoutImageAPI() 
     {
+        
+        let formData = new FormData();
+        //const Data = Object.fromEntries(formData);
+        //console.log("copieTitreImg", copieTitreImg);
+        console.log("copieImage", copieImage);
+
+        formData.append('image', copieImage,);
+        formData.append('title', copieTitreImg);
+        formData.append('category', copiCategImg);
+        //console.log("Data",Data);
+
+
         //const monTokenAuth = await localStorage.getItem('Tokens');
         //convertir les donnees en json
+        console.log("formData",formData);
         const convertFormData = Object.fromEntries(formData);
+        console.log("convertFormData",convertFormData);
+
         const payload = JSON.stringify(convertFormData);
         console.log("payload",payload);
 
-        const ajoutImageURL = fetch('http://localhost:5678/api/works',
+        const ajoutImageURL = await fetch('http://localhost:5678/api/works',
         {
             method : "POST",
-            body : payload,
-            headers :{"Content-Type" : "application/json", "Authorization" : localStorage.getItem('Tokens'),},
+            body : formData,
+            headers :{  
+                        /*"Content-Type" : "multipart/form-data",*/
+                        "Authorization": "Bearer" + monToken,
+                    },
         })
         .then(response => {
 
@@ -630,20 +650,129 @@ function VerifieDataFile()
             }
             else
             {
-                alert("HTTP-Error: " + connectPost.status);
+                console.log("Erreur de connexion");
+                messagFile.textContent = "Erreur de connexion";
+                messagFile.style.color ='red';
+                //alert("HTTP-Error: " + connectPost.status);
             }
-        })
-        .then(result => {
-        })  
+        });
+        /*.then(result => {
+        }) */ 
     }
-
 
 }
 
 //suppresion des images sur Api
 function supprimerWork() 
 {
+    const selectSectFig = document.querySelector("#galleryJSModal");
+    const selectTousFig = selectSectFig.querySelectorAll("figure");
+    console.log("selectTousFig", selectTousFig);
     
+    const aBtnCorbeilImg = document.querySelectorAll(".btnCorbeilImg i");
+    console.log("aBtnCorbeilImg", aBtnCorbeilImg);
+
+    const Img = selectSectFig.querySelectorAll("img");
+    console.log("Img", Img);
+
+    const suppriImgBtn = document.querySelector("#supprimerImages");
+    let recupIDimg =0;
+
+    for (let i = 0; i < aBtnCorbeilImg.length; i++) 
+    {
+        aBtnCorbeilImg[i].addEventListener('click', function(e)
+        {
+            //console.log(" e.target",  e.target);
+            e.preventDefault();
+            e.target.style.color = "green";
+            const altImg = Img[i].alt;
+
+            console.log("altImg", altImg);
+            console.log(" e.target",  e.target);
+            console.log("pictures",pictures);
+            
+            for (let i = 0; i < pictures.length; i++) 
+            {
+                if (altImg === pictures[i].title) 
+                {
+                    recupIDimg = pictures[i].id;
+                } 
+            }
+            console.log("recupIDimg", recupIDimg);
+
+            //const copieaBtnCorbeilImg = Array.from(aBtnCorbeilImg);
+            const copieaBtnCorbeilImg = Array.from(document.querySelectorAll("a.btnCorbeilImg i"));
+            //console.log("copieaBtnCorbeilImg",copieaBtnCorbeilImg);
+
+            /*const iCorb = selectSectFig.querySelectorAll("i");
+            console.log(" iCorb",  iCorb);
+            const copieiCorb = Array.from(iCorb);*/
+
+            const btnImgCorb = copieaBtnCorbeilImg.filter(function(aCorb)
+            {
+                //console.log("aCorb", aCorb);
+                //console.log(" e.target",  e.target)
+                //let ancre = e.target.closest('a');
+
+                /*let iTags = Array.from(document.querySelectorAll("a.btnCorbeilImg i"));
+                console.log("iTags", iTags);
+
+
+                const tags = iTags.filter((i)=>{
+                
+                    return i.id != aCorb.id;
+                });
+                console.log("tags", tags);*/
+
+                return aCorb != e.target;
+
+            });
+            //console.log("btnImgCorb", btnImgCorb);
+
+            for (const item of btnImgCorb) 
+            {
+                item.style.color = "#FFFFFF"; // Change la couleur du texte en blanc
+            }
+        });
+    }
+
+    //Envoie image a supprimer a  l'API
+    suppriImgBtn.addEventListener('click', function()
+    {
+        //Id des images
+        let id = recupIDimg;
+        console.log("id", id);
+
+        const SuppImgURL = fetch(`http://localhost:5678/api/works/${id}`,
+        {
+            method : "DELETE",
+            //body : payload,
+            headers :{
+                        "Content-Type" : "application/json", 
+                        "Authorization" : "Bearer" + monToken,
+                    },
+        })
+        .then(response => {
+
+            if(response.ok)
+            {
+                console.log("L'image est bien suppreimer");
+
+                document.querySelector("#galleryJSModal").innerHTML = "";
+                document.querySelector("#galleryJSModal").style.display = "grid";
+                genererGallery(pictures, idgalleryJSModal);
+                remplaceTitrePictures();  
+                ajoutIconeImage();
+
+                return response.json();
+            }
+            else
+            {
+                console.log("Erreur de connexion");
+                //alert("HTTP-Error: " + connectPost.status);
+            }
+        })  
+    });
 }
 
 //Permet de remplecer les titre d'image
@@ -666,9 +795,11 @@ function ajoutIconeImage()
     const iconeImageModal = selcGalleryJSModal.querySelectorAll("figure");
     console.log("iconeImageModal", iconeImageModal)
 
+    let cpt = 0;
     //Cette boucle permet d'ajouter les icone corbeilles
     for (const item of iconeImageModal) 
     {
+        cpt ++;
         //Creation du div
         const divCorbModal = document.createElement("div");
         divCorbModal.setAttribute('class','iconPoub');
@@ -679,6 +810,7 @@ function ajoutIconeImage()
         //Creation du a pour les corbeilles
         const acorbModal = document.createElement("a");
         acorbModal.setAttribute('href','#');
+        acorbModal.setAttribute('class','btnCorbeilImg');
 
         //Rattachement du a a son parent div
         divCorbModal.appendChild(acorbModal);
@@ -686,6 +818,7 @@ function ajoutIconeImage()
         //Creation du i pour les corbeil
         const icorbModal = document.createElement("i");
         icorbModal.setAttribute('class','fa-regular fa-trash-can fa-lg');
+        icorbModal.setAttribute('id','corbeil' + cpt);
 
         //Rattachement du a a son parent div
         acorbModal.appendChild(icorbModal);
@@ -1060,6 +1193,8 @@ const closeModal = function(e)
     document.querySelector("#supprimerImages").style.display = "flex";
     
     document.querySelector("#lienRetourModal").style.visibility = "hidden";
+
+    //document.querySelector(".galeryModal > #sectiBtnModal").innerHTML = "";
 }
 
 const focusInModal = function (e)

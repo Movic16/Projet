@@ -631,10 +631,10 @@ body > #sect-header
 .iconPoub a
 {
 	text-decoration: none;
-	color: #FFFFFF;
+	/*color: #FFFFFF;*/
 }
 
-.iconPoub i
+.iconPoub a i
 {
 	color: #FFFFFF ;
 	cursor: pointer;
