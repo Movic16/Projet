@@ -635,7 +635,7 @@ function VerifieDataFile()
             body : formData,
             headers :{  
                         //"Content-Type" : "multipart/form-data",
-                        "Authorization":"Bearer" + monToken, //localStorage.getItem('Tokens')>,
+                        "Authorization":`Bearer ${monToken}`, //localStorage.getItem('Tokens')>,
                     },
         })
         .then(response => {
