@@ -43,7 +43,8 @@ document.querySelector('#btn-envoie').addEventListener('click', function()
 
             //Enregistrement du token 
             const recupToken = result.token;
-            localStorage.setItem("Tokens", JSON.stringify(recupToken));
+            //localStorage.setItem("Tokens", JSON.stringify("recupToken"));
+            localStorage.setItem("Tokens", recupToken);
             console.log("recupToken ", recupToken );
 
             //document.title = "Sophie Bluel - Architecte d'intérieur";

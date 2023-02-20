@@ -537,6 +537,7 @@ function VerifieDataFile()
         copieTitreImg = event.target.value;
         console.log("copieTitreImg", copieTitreImg);
         autoBtnValid();
+
         return;
     });
     //console.log("copieTitreImg", copieTitreImg);
@@ -547,6 +548,8 @@ function VerifieDataFile()
         copiCategImg = event.target.value;
         console.log("copiCategImg", copiCategImg);
         autoBtnValid();
+        //console.log("verifImageVu", verifImageVu.src)
+
         return;
     });
 
@@ -609,14 +612,19 @@ function VerifieDataFile()
     async function EnvoieAjoutImageAPI() 
     {
         let formData = new FormData();
-        //const Data = Object.fromEntries(formData);
-        //console.log("copieTitreImg", copieTitreImg);
-        console.log("copieImage", copieImage);
 
-        formData.append('image', copieImage,);
+        //console.log("copieTitreImg", copieTitreImg);
+        //console.log("fileInput.files[0]", fileInput.files[0]);
+        //console.log("verifImageVu", verifImageVu.name)
+        //console.log("copeImage", copieImage);
+        //let blob = new Blob([fileInput.files[0]], { type: fileTypes});
+        //console.log("blob", blob);
+        //const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
+        //console.log("allowedFileTypes", allowedFileTypes);
+
+        formData.append('image', fileInput.files[0].name);
         formData.append('title', copieTitreImg);
         formData.append('category', copiCategImg);
-        //console.log("Data",Data);
 
 
         //const monTokenAuth = await localStorage.getItem('Tokens');
@@ -632,10 +640,11 @@ function VerifieDataFile()
         const ajoutImageURL = await fetch('http://localhost:5678/api/works',
         {
             method : "POST",
-            body : formData,
+            body : payload,
             headers :{  
+                        "Content-Type" : "application/json",
                         //"Content-Type" : "multipart/form-data",
-                        "Authorization":`Bearer ${monToken}`, //localStorage.getItem('Tokens')>,
+                        "Authorization" : `Bearer ${monToken}`, //localStorage.getItem('Tokens')>,
                     },
         })
         .then(response => {
@@ -646,7 +655,11 @@ function VerifieDataFile()
                 messagFile.textContent = "L'image est envoyer avec sucés";
                 messagFile.style.color ='green';
 
-                return response.json();
+                //document.querySelector("#galleryJSModal").innerHTML = "";
+                //document.querySelector("#galleryJSModal").style.display = "grid";
+                //genererGallery(pictures, idgalleryJSModal);
+
+                //return response.json();
             }
             else
             {
@@ -655,9 +668,9 @@ function VerifieDataFile()
                 messagFile.style.color ='red';
                 //alert("HTTP-Error: " + connectPost.status);
             }
-        })
-        .then(result => {
         });
+        /*.then(result => {
+        });*/
     }
 
 }
@@ -748,8 +761,8 @@ function supprimerWork()
             method : "DELETE",
             //body : payload,
             headers :{
-                        "Content-Type" : "application/json", 
-                        "Authorization" : "Bearer" + monToken,
+                        //"Content-Type" : "application/json", 
+                        "Authorization" : `Bearer ${monToken}`,
                     },
         })
         .then(response => {
@@ -759,12 +772,12 @@ function supprimerWork()
                 console.log("L'image est bien suppreimer");
 
                 document.querySelector("#galleryJSModal").innerHTML = "";
-                document.querySelector("#galleryJSModal").style.display = "grid";
+                //document.querySelector("#galleryJSModal").style.display = "grid";
                 genererGallery(pictures, idgalleryJSModal);
                 remplaceTitrePictures();  
                 ajoutIconeImage();
 
-                return response.json();
+                //return response.json();
             }
             else
             {
