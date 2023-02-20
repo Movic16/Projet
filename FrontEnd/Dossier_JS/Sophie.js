@@ -383,10 +383,12 @@ const openModal = function (e)
             document.querySelector("#btnModal").innerHTML = "";
             btnValidAjoutPicture();
             VerifieDataFile();
-            //e.stopPropagation();
+            e.stopImmediatePropagation();
+            
         }
-        //console.log(" e.target", e.target);
-       // btnAjoutImage.removeEventListener("click",btnAjoutImage.addEventListener);
+        console.log(" e", e);
+        
+        //modal.removeEventListener("click", btnAjoutImage);
     });
 
     //Selection le retour aux gallery modal
@@ -408,7 +410,10 @@ const openModal = function (e)
         
         document.querySelector("#lienRetourModal").style.visibility = "hidden";
         supprimerWork();
-        
+        //btnAjoutImage.style.display = "initial"
+
+        //modal.removeEventListener("click", btnAjoutImage);
+        //btnRetourModal.removeEventListener('click',btnAjoutImage);
     });
 }
 
@@ -640,17 +645,19 @@ function VerifieDataFile()
         const ajoutImageURL = await fetch('http://localhost:5678/api/works',
         {
             method : "POST",
-            body : payload,
+            body : formData,
             headers :{  
-                        "Content-Type" : "application/json",
+                        //"Accept": 'multipart/form-data',
+                        //"Content-Type" : "application/json",
                         //"Content-Type" : "multipart/form-data",
-                        "Authorization" : `Bearer ${monToken}`, //localStorage.getItem('Tokens')>,
+                        'Authorization' : "Bearer " + monToken,
                     },
         })
         .then(response => {
 
             if(response.ok)
             {
+                
                 console.log("L'image est envoyer avec sucés");
                 messagFile.textContent = "L'image est envoyer avec sucés";
                 messagFile.style.color ='green';
@@ -903,6 +910,7 @@ function btnAjoutSupModal()
 
     //Creation du button
     const btnAjoutModal = document.createElement("button");
+    btnAjoutModal.setAttribute('type','button');
     btnAjoutModal.setAttribute('id','btn-ajoutPicture');
     btnAjoutModal.textContent = "Ajouter une photo";
 
