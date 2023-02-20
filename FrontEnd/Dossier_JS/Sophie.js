@@ -616,6 +616,7 @@ function VerifieDataFile()
     //Envoie image a l'API
     async function EnvoieAjoutImageAPI() 
     {
+        //let categoryId /*= copiCategImg*/;
         let formData = new FormData();
 
         //console.log("copieTitreImg", copieTitreImg);
@@ -627,9 +628,9 @@ function VerifieDataFile()
         //const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
         //console.log("allowedFileTypes", allowedFileTypes);
 
-        formData.append('image', fileInput.files[0].name);
         formData.append('title', copieTitreImg);
-        formData.append('category', copiCategImg);
+        formData.append('image', fileInput.files[0].name);
+        formData.append('Categorie', copiCategImg);
 
 
         //const monTokenAuth = await localStorage.getItem('Tokens');
@@ -649,7 +650,7 @@ function VerifieDataFile()
             headers :{  
                         //"Accept": 'multipart/form-data',
                         //"Content-Type" : "application/json",
-                        //"Content-Type" : "multipart/form-data",
+                        "Content-Type" : "multipart/form-data",
                         'Authorization' : "Bearer " + monToken,
                     },
         })
