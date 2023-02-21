@@ -372,6 +372,7 @@ const openModal = function (e)
     const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
     btnAjoutImage.addEventListener('click', function(e)
     {
+        console.log(" hhh");
         
         if(modal != null)
         {
@@ -384,7 +385,6 @@ const openModal = function (e)
             btnValidAjoutPicture();
             VerifieDataFile();
             e.stopImmediatePropagation();
-            
         }
         console.log(" e", e);
         
@@ -410,10 +410,31 @@ const openModal = function (e)
         
         document.querySelector("#lienRetourModal").style.visibility = "hidden";
         supprimerWork();
-        //btnAjoutImage.style.display = "initial"
+        btnVersAjoutImg();
+    });
+}
 
-        //modal.removeEventListener("click", btnAjoutImage);
-        //btnRetourModal.removeEventListener('click',btnAjoutImage);
+function btnVersAjoutImg()
+{
+    //Selection le boutou ajouter une photo
+    const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
+    btnAjoutImage.addEventListener('click', function(e)
+    {
+        console.log(" hhh");
+        
+        if(modal != null)
+        {
+            document.querySelector(".galeryModal").style.height = "600px";
+
+            document.querySelector("#galleryJSModal").innerHTML = "";
+            ajouterImages();
+
+            document.querySelector("#btnModal").innerHTML = "";
+            btnValidAjoutPicture();
+            VerifieDataFile();
+            e.stopImmediatePropagation();
+        }
+        //console.log(" e", e);
     });
 }
 
@@ -629,9 +650,8 @@ function VerifieDataFile()
         //console.log("allowedFileTypes", allowedFileTypes);
 
         formData.append('title', copieTitreImg);
-        formData.append('image', fileInput.files[0].name);
         formData.append('Categorie', copiCategImg);
-
+        formData.append('image', fileInput.files[0].name);
 
         //const monTokenAuth = await localStorage.getItem('Tokens');
         //convertir les donnees en json
@@ -648,17 +668,16 @@ function VerifieDataFile()
             method : "POST",
             body : formData,
             headers :{  
-                        //"Accept": 'multipart/form-data',
+
                         //"Content-Type" : "application/json",
-                        "Content-Type" : "multipart/form-data",
-                        'Authorization' : "Bearer " + monToken,
+                        //"Content-Type" : "multipart/form-data",
+                        "Authorization" : `Bearer ${monToken}`,
                     },
         })
         .then(response => {
 
             if(response.ok)
             {
-                
                 console.log("L'image est envoyer avec sucés");
                 messagFile.textContent = "L'image est envoyer avec sucés";
                 messagFile.style.color ='green';
