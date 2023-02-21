@@ -388,7 +388,6 @@ const openModal = function (e)
         }
         console.log(" e", e);
         
-        //modal.removeEventListener("click", btnAjoutImage);
     });
 
     //Selection le retour aux gallery modal
