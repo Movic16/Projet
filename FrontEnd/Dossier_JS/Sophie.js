@@ -367,9 +367,10 @@ const openModal = function (e)
     previouslyFocusedElement = document.querySelector(' :focus');
     focusables[0].focus();
     supprimerWork();
+    btnVersAjoutImg();
 
     //Selection le boutou ajouter une photo
-    const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
+   /* const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
     btnAjoutImage.addEventListener('click', function(e)
     {
         console.log(" hhh");
@@ -388,7 +389,7 @@ const openModal = function (e)
         }
         console.log(" e", e);
         
-    });
+    });*/
 
     //Selection le retour aux gallery modal
     const btnRetourModal = modal.querySelector('#lienRetourModal')
@@ -413,6 +414,7 @@ const openModal = function (e)
     });
 }
 
+//Permet d'aller a la page d'ajout image
 function btnVersAjoutImg()
 {
     //Selection le boutou ajouter une photo
