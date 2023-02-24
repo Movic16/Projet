@@ -65,13 +65,15 @@ genererGallery(pictures,  idgalleryJS);
 //const reponseCategori = await fetch('http://localhost:5678/api/categories'); //L'adresse ou on doit recuperer les photos de categorie
 //const picturesFiltre = await reponseCategori.json(); //Stocke les photos de categorie dans pictureFiltre
 
+console.log("pictures", pictures);
+
 //Permet de recupere tous les categorie dans l'API works
 const copiePictures = Array.from(pictures);
 const categories = copiePictures.map(categ => categ.category)
-console.log(categories);
+console.log("categories", categories);
 
 const copieCategorie = Array.from(categories);
-console.log(copieCategorie);
+console.log("copieCategorie", copieCategorie);
 const monSetcateg = new Set();
 
 for (let i = 0; i < copieCategorie.length; i++) 
@@ -79,13 +81,22 @@ for (let i = 0; i < copieCategorie.length; i++)
     monSetcateg.add(copieCategorie[i].name);
 }
 
+/*const monSetcategId = new Set();
+for (let i = 0; i < copieCategorie.length; i++) 
+{
+    monSetcategId.add(copieCategorie[i].id);
+    //monSetcategId.add(copieCategorie[i].name);
+}
+
+console.log("monSetcategId", monSetcategId);*/
 console.log("monSetcateg", monSetcateg);
 listCategoryHtml = monSetcateg;
-// const ctg = [...new Set(copieCategorie.forEach(c => c.name))];
+
+/*// const ctg = [...new Set(copieCategorie.forEach(c => c.name))];
 // console.log("ctg", ctg);
 
 //Permet de stocker chaque bouton
-//let stockButton = [];
+//let stockButton = [];*/
 
 //Creer le bouton tous
 let buttonElement = document.createElement("button");
@@ -396,7 +407,7 @@ const openModal = function (e)
     btnRetourModal.addEventListener('click', function()
     {
         document.querySelector("#titlemodal").textContent = "Galerie photo";
-        //document.querySelector(".galeryModal").style.height = "760px";
+        document.querySelector(".galeryModal").style.height = "760px";
 
         document.querySelector("#galleryJSModal").innerHTML = "";
         document.querySelector("#galleryJSModal").style.display = "grid";
@@ -589,6 +600,7 @@ function VerifieDataFile()
     console.log(" verifImageVu",  verifImageVu.src);
 
     let copieImage;
+    let numCategId = 0;
     function autoBtnValid()
     {
         const copiFilImg = fileInput.files;
@@ -637,6 +649,25 @@ function VerifieDataFile()
             validBtnFile.style.background ="#A7A7A7";
             validBtnFile.setAttribute("disabled","");
         }
+
+       /* const rechIdCateg = Array.from(listCategoryHtml)
+        for (let i =0; i < rechIdCateg.length; i++) 
+        {
+            numCategId++;
+
+            if (copiCategImg == rechIdCateg[i]) 
+            {
+                numCategId;
+            }
+            else
+            {
+                numCategId =  +4;
+            }
+            //console.log("numCategId", numCategId);          
+        }
+
+        console.log("numCategId", numCategId);
+        console.log("rechIdCateg", rechIdCateg);*/
     }
 
     //Envoie image a l'API
@@ -644,9 +675,9 @@ function VerifieDataFile()
     {
         //let categoryId /*= copiCategImg*/;
         let formData = new FormData();
-        let data = {image :'', title : '', category : 1};
 
         //Hotel First Arte - New Delhi
+        //let data = {image :'', title : '', category : 1};
         //console.log("copieTitreImg", copieTitreImg);
         //console.log("fileInput.files[0]", fileInput.files[0]);
         //console.log("verifImageVu", verifImageVu.name);
@@ -664,11 +695,10 @@ function VerifieDataFile()
         formData.append('image', fileInput.files[0]);
         formData.append('title', copieTitreImg);
         formData.append('category', copiCategImg);
-        //formData.append('userId', 11);
 
-        data.image = fileInput.files[0];
-        data.title = copieTitreImg;
-        console.log("data",data);
+        //data.image = fileInput.files[0];
+        //data.title = copieTitreImg;
+        //console.log("data",data);
 
         //const monTokenAuth = await localStorage.getItem('Tokens');
         //convertir les donnees en json
@@ -685,9 +715,9 @@ function VerifieDataFile()
             method : "POST",
             body : formData,
             headers :{  
-                        "accept": "application/json",
+                        //"accept": "application/json",
                         //"Content-Type" : "application/json",
-                        "Content-Type" : "multipart/form-data",
+                        //"Content-Type" : "multipart/form-data",
                         "Authorization" : `bearer ${monToken}`,
                     },
         })
