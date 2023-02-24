@@ -657,9 +657,9 @@ function VerifieDataFile()
 
         //let myblob = new Blob([fileInput.files[0]], { type: imgTypeRet});
         //console.log("blob", myblob,);
-        const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
-        console.log("allowedFileTypes", allowedFileTypes.type);
-        console.log("fileInput.files[0]", fileInput.files[0]);
+        //const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
+        //console.log("allowedFileTypes", allowedFileTypes.type);
+        //console.log("fileInput.files[0]", fileInput.files[0]);
 
         formData.append('image', fileInput.files[0]);
         formData.append('title', copieTitreImg);
@@ -683,7 +683,7 @@ function VerifieDataFile()
         const ajoutImageURL = fetch('http://localhost:5678/api/works',
         {
             method : "POST",
-            body : data,
+            body : formData,
             headers :{  
                         "accept": "application/json",
                         //"Content-Type" : "application/json",
