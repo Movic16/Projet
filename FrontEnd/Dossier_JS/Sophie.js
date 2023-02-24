@@ -396,7 +396,7 @@ const openModal = function (e)
     btnRetourModal.addEventListener('click', function()
     {
         document.querySelector("#titlemodal").textContent = "Galerie photo";
-        document.querySelector(".galeryModal").style.height = "760px";
+        //document.querySelector(".galeryModal").style.height = "760px";
 
         document.querySelector("#galleryJSModal").innerHTML = "";
         document.querySelector("#galleryJSModal").style.display = "grid";
@@ -420,9 +420,7 @@ function btnVersAjoutImg()
     //Selection le boutou ajouter une photo
     const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
     btnAjoutImage.addEventListener('click', function(e)
-    {
-        console.log(" hhh");
-        
+    {   
         if(modal != null)
         {
             document.querySelector(".galeryModal").style.height = "600px";
@@ -442,7 +440,7 @@ function btnVersAjoutImg()
 //Verifier les donner avant d'envoie les images
 function VerifieDataFile() 
 {
-    const fileInput = document.querySelector('input[type="file"]');
+    const fileInput = document.querySelector('#file');
     const messagFile = document.querySelector('#massageFile');
 
     const titreImage = document.getElementById('titre');
@@ -457,6 +455,8 @@ function VerifieDataFile()
     const fileTypes = ['image/jpg','image/png', 'image/jpeg'];
 
     console.log("fileInput", fileInput.files);
+    let copieURLImg;
+
     //Importe image
     fileInput.addEventListener('change', function() {
 
@@ -478,6 +478,8 @@ function VerifieDataFile()
             analiseImageVisul.addEventListener('load', function()
             {
                 imgeVisul.setAttribute('src', this.result);
+                copieURLImg = this.result;
+
                 autoBtnValid();
             })
         }
@@ -522,7 +524,7 @@ function VerifieDataFile()
         }
 
     }
-
+    let imgTypeRet;
     //Validation Type images
     function validFileType(file) 
     {
@@ -537,7 +539,9 @@ function VerifieDataFile()
             {
                 console.log("Type image ok");
                 messagFile.textContent = "";
-
+                console.log("Type image ", fileTypes[i]);
+                imgTypeRet = fileTypes[i];
+                console.log("imgTypeRet ", imgTypeRet);
                 return true;
             }
         }
@@ -636,27 +640,39 @@ function VerifieDataFile()
     }
 
     //Envoie image a l'API
-    async function EnvoieAjoutImageAPI() 
+    function EnvoieAjoutImageAPI() 
     {
         //let categoryId /*= copiCategImg*/;
         let formData = new FormData();
+        let data = {image :'', title : '', category : 1};
 
+        //Hotel First Arte - New Delhi
         //console.log("copieTitreImg", copieTitreImg);
         //console.log("fileInput.files[0]", fileInput.files[0]);
-        //console.log("verifImageVu", verifImageVu.name)
+        //console.log("verifImageVu", verifImageVu.name);
         //console.log("copeImage", copieImage);
-        //let blob = new Blob([fileInput.files[0]], { type: fileTypes});
-        //console.log("blob", blob);
-        //const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
-        //console.log("allowedFileTypes", allowedFileTypes);
+        //console.log("copieURLImg", copieURLImg);
+        //const convertCopiCategImg = parseInt(copiCategImg,36)*64;
+        //console.log("convertCopiCategImg", convertCopiCategImg)
 
+        //let myblob = new Blob([fileInput.files[0]], { type: imgTypeRet});
+        //console.log("blob", myblob,);
+        const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
+        console.log("allowedFileTypes", allowedFileTypes.type);
+        console.log("fileInput.files[0]", fileInput.files[0]);
+
+        formData.append('image', fileInput.files[0]);
         formData.append('title', copieTitreImg);
-        formData.append('Categorie', copiCategImg);
-        formData.append('image', fileInput.files[0].name);
+        formData.append('category', copiCategImg);
+        //formData.append('userId', 11);
+
+        data.image = fileInput.files[0];
+        data.title = copieTitreImg;
+        console.log("data",data);
 
         //const monTokenAuth = await localStorage.getItem('Tokens');
         //convertir les donnees en json
-        console.log("formData",formData);
+        console.log("formData", Array.from(formData));
         const convertFormData = Object.fromEntries(formData);
         console.log("convertFormData",convertFormData);
 
@@ -664,15 +680,15 @@ function VerifieDataFile()
         console.log("payload", payload);
         console.log("monToken", monToken);
 
-        const ajoutImageURL = await fetch('http://localhost:5678/api/works',
+        const ajoutImageURL = fetch('http://localhost:5678/api/works',
         {
             method : "POST",
-            body : formData,
+            body : data,
             headers :{  
-
+                        "accept": "application/json",
                         //"Content-Type" : "application/json",
-                        //"Content-Type" : "multipart/form-data",
-                        "Authorization" : `Bearer ${monToken}`,
+                        "Content-Type" : "multipart/form-data",
+                        "Authorization" : `bearer ${monToken}`,
                     },
         })
         .then(response => {
@@ -800,7 +816,7 @@ function supprimerWork()
                 console.log("L'image est bien suppreimer");
 
                 document.querySelector("#galleryJSModal").innerHTML = "";
-                //document.querySelector("#galleryJSModal").style.display = "grid";
+                document.querySelector("#galleryJSModal").style.display = "grid";
                 genererGallery(pictures, idgalleryJSModal);
                 remplaceTitrePictures();  
                 ajoutIconeImage();
@@ -1017,7 +1033,7 @@ function ajouterImages()
     const inputFile = document.createElement("input");
     inputFile.setAttribute('type','file');
     inputFile.setAttribute('id','file');
-    inputFile.setAttribute('accept','.jpg, .png');
+    inputFile.setAttribute('accept','image/jpg, image/png, image/jpeg');
     inputFile.setAttribute('alt','fichier');
     inputFile.setAttribute('size','4000000');
     inputFile.setAttribute('required','');
@@ -1134,12 +1150,15 @@ function ajouterImages()
     //Rattachement du balise datalistlistcategorie a son parent divlistcategorie
     divlistcategorie.appendChild(datalistlistcategorie);
 
+    let nbr = 0;
     console.log("listCategoryHtml", listCategoryHtml);
     for(const item of listCategoryHtml)
     {
+        nbr++;
         //Creation de balise div divlistcategorie
         const optionCategorie = document.createElement("option");
-        optionCategorie.setAttribute('value',item);
+        optionCategorie.setAttribute('value', nbr);
+        optionCategorie.textContent = item;
 
         //Rattachement du balise optionCategorie a son parent divlistcategorie
         datalistlistcategorie.appendChild(optionCategorie);

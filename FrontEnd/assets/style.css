@@ -572,7 +572,7 @@ body > #sect-header
 .galeryModal
 {
 	width: 640px;
-	height: 760px;
+	min-height: 100px;
 
 	background: #FFFFFF;
 	border-radius: 10px;
