@@ -760,16 +760,19 @@ async function newPictures()
         supprimerWork();
         btnVersAjoutImg();
     });
-}
 
-function genereImgSuppModal() 
-{
-    //Partie modal apres suppression img
-    modal.querySelector("#galleryJSModal").innerHTML = "";
-    modal.querySelector("#galleryJSModal").style.display = "grid";
-    genererGallery(pictures, idgalleryJSModal);
-    remplaceTitrePictures();  
-    ajoutIconeImage();
+    const fentSupModal = modal.querySelector("#galleryJSModal > figure");
+    console.log("fentSupModal",fentSupModal);
+    
+    if(fentSupModal != null)
+    {
+        //Partie modal apres suppression img
+        modal.querySelector("#galleryJSModal").innerHTML = "";
+        modal.querySelector("#galleryJSModal").style.display = "grid";
+        genererGallery(NewPictures, idgalleryJSModal);
+        remplaceTitrePictures();  
+        ajoutIconeImage();
+    }
 }
 
 //suppresion des images sur Api
@@ -861,7 +864,6 @@ function supprimerWork()
         });
 
         newPictures();
-        //genereImgSuppModal();
     });
 }
 
