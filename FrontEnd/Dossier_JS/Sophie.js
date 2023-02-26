@@ -715,7 +715,7 @@ function VerifieDataFile()
         });
 
         //let NewAddpictures = await window.localStorage.getItem('pictures');
-        //Partie normal
+        //Affiche la derniere image apres ajout 
         document.querySelector("#galleryJS").innerHTML = "";
         genererGallery(pictures,  idgalleryJS);
     }
