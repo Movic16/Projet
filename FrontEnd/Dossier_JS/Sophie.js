@@ -7,7 +7,8 @@ let previouslyFocusedElement = null;
 let listCategoryHtml = [];
 
 //Récupération des pièces eventuellement stockées dans le localStorage
-let pictures = window.localStorage.getItem('pieces');
+let pictures = window.localStorage.getItem('pictures');
+//let pictures = window.localStorage.getItem('pieces')
 
 if(pictures == null)
 {
@@ -62,8 +63,9 @@ genererGallery(pictures,  idgalleryJS);
 
 /********Partie filtres********/
 // Récupération les photos de categorie depuis le serveur ou  sur le site
-//const reponseCategori = await fetch('http://localhost:5678/api/categories'); //L'adresse ou on doit recuperer les photos de categorie
-//const picturesFiltre = await reponseCategori.json(); //Stocke les photos de categorie dans pictureFiltre
+const reponseCategori = await fetch('http://localhost:5678/api/categories'); //L'adresse ou on doit recuperer les photos de categorie
+const picturesCategory = await reponseCategori.json(); //Stocke les photos de categorie dans pictureFiltre
+console.log("picturesCategory", picturesCategory);
 
 console.log("pictures", pictures);
 
@@ -81,14 +83,6 @@ for (let i = 0; i < copieCategorie.length; i++)
     monSetcateg.add(copieCategorie[i].name);
 }
 
-/*const monSetcategId = new Set();
-for (let i = 0; i < copieCategorie.length; i++) 
-{
-    monSetcategId.add(copieCategorie[i].id);
-    //monSetcategId.add(copieCategorie[i].name);
-}
-
-console.log("monSetcategId", monSetcategId);*/
 console.log("monSetcateg", monSetcateg);
 listCategoryHtml = monSetcateg;
 
@@ -115,8 +109,6 @@ let cmpt = 0; //Permet d'incrementer les bounton
 //Cette boucle permet de creer les boutons et les rajoutes aux html
 for (const item of monSetcateg) 
 {
-    // Récupération de l'élément du DOM qui accueillera les fiches
-    //const Divfiltre = document.querySelector("#filtre");
     cmpt ++;
 
     //Creation du ballise button
@@ -125,9 +117,6 @@ for (const item of monSetcateg)
     buttonElement.setAttribute('class','button-Filtre'); //Mettre l'attribut class sur 'button'
     buttonElement.textContent = item;
     buttonElement.setAttribute('value', item); //Mettre l'attribut value sur 'button'
-
-    //stokage des buttons
-    //stockButton[i] = buttonElement;
 
     // On rattache les balise button a leur parent filtre du html
     Divfiltre.appendChild(buttonElement);
@@ -259,8 +248,8 @@ function deconnected()
             //supprimer la cle token
             localStorage.removeItem('Tokens');
             alert("Vous allez être déconnecter")
-            location.href = "http://127.0.0.1:5500/FrontEnd/index.html#portfolio";
-            //window.location.replace("/index.html"); //rester sur le site
+            //location.href = "http://127.0.0.1:5500/FrontEnd/index.html#portfolio";
+            window.location.replace("/index.html"); //rester sur le site
 
             //Actualise la page
             document.querySelector("#loginUser").innerHTML = "";
@@ -380,32 +369,12 @@ const openModal = function (e)
     supprimerWork();
     btnVersAjoutImg();
 
-    //Selection le boutou ajouter une photo
-   /* const btnAjoutImage = modal.querySelector('#btn-ajoutPicture')
-    btnAjoutImage.addEventListener('click', function(e)
-    {
-        console.log(" hhh");
-        
-        if(modal != null)
-        {
-            document.querySelector(".galeryModal").style.height = "600px";
-
-            document.querySelector("#galleryJSModal").innerHTML = "";
-            ajouterImages();
-
-            document.querySelector("#btnModal").innerHTML = "";
-            btnValidAjoutPicture();
-            VerifieDataFile();
-            e.stopImmediatePropagation();
-        }
-        console.log(" e", e);
-        
-    });*/
-
     //Selection le retour aux gallery modal
     const btnRetourModal = modal.querySelector('#lienRetourModal')
     btnRetourModal.addEventListener('click', function()
     {
+        //let addpictures = window.localStorage.getItem('pictures');
+        
         document.querySelector("#titlemodal").textContent = "Galerie photo";
         document.querySelector(".galeryModal").style.height = "760px";
 
@@ -495,8 +464,6 @@ function VerifieDataFile()
             })
         }
         console.log("fileInput", fileInput.files);
-        //console.log("validSize",  validSize());
-        //console.log("validFileType",   validFileType(fileInput.files[0]));
     });
 
     //Validation size image
@@ -535,6 +502,7 @@ function VerifieDataFile()
         }
 
     }
+
     let imgTypeRet;
     //Validation Type images
     function validFileType(file) 
@@ -624,77 +592,81 @@ function VerifieDataFile()
                 console.log("Envoie en cours...");
                 messagFile.textContent = "Envoie en cours...";
                 messagFile.style.color ='green';
+                recupCtegorieId();
                 EnvoieAjoutImageAPI();
             });
         }
-        /*else
-        {
-            validBtnFile.style.background ="#A7A7A7";
-            validBtnFile.setAttribute="disabled";
-            document.querySelector('#btnModal > #btn-envoiFile').setAttribute="disabled";
-            //validBtnFile.style.visibility ="hidden";
-
-            /*document.addEventListener("load", () =>{
-
-                validBtnFile.setAttribute("disabled","");
-                validBtnFile.style.background ="#A7A7A7";
-            });
-
-            document.querySelector("#btnModal").innerHTML = "";
-            btnValidAjoutPicture();*
-        }*/
 
         if (copieTitreImg == "" || copiCategImg == "") 
         {
             validBtnFile.style.background ="#A7A7A7";
             validBtnFile.setAttribute("disabled","");
         }
+    }
 
-       /* const rechIdCateg = Array.from(listCategoryHtml)
-        for (let i =0; i < rechIdCateg.length; i++) 
+    let copieIdcategory = null;
+
+    //verifie si id du categorie existe
+    function recupCtegorieId() 
+    {
+        const categoryImag = document.getElementById('categorie');
+        console.log("categoryImag", categoryImag.value);
+        console.log("picturesCategory", picturesCategory);
+
+        const messagCateg = document.querySelector('#massageFile');
+
+        const copietousCateg = Array.from(picturesCategory);
+
+        console.log("copietousCateg", copietousCateg);
+
+        const dataCateg = {name : categoryImag.value};
+        console.log("dataCateg", dataCateg);
+        console.log("dataCateg", dataCateg.name);
+        //const copiedataCateg = Array.from(dataCateg.name);
+        //console.log("copiedataCateg", copiedataCateg);
+
+        const recupCategoryID = copietousCateg.filter(function(idCateg)
         {
-            numCategId++;
+            let catgId;
+            console.log("idCateg", idCateg);
 
-            if (copiCategImg == rechIdCateg[i]) 
+            if (dataCateg.name == idCateg.name) 
             {
-                numCategId;
+                catgId = idCateg.id;
+                copieIdcategory = idCateg.id;
+                console.log("catgId.id", catgId);
+                return idCateg.id;
             }
-            else
-            {
-                numCategId =  +4;
-            }
-            //console.log("numCategId", numCategId);          
+            
+        });
+
+        if (recupCategoryID.length == 0) 
+        {
+            console.log("Cette categorie n'existe pas");
+            messagCateg.textContent = "Cette categorie n'existe pas, choisir un autre dans la liste";
+            messagCateg.style.color ='red';
+
+            return;
         }
 
-        console.log("numCategId", numCategId);
-        console.log("rechIdCateg", rechIdCateg);*/
+        //console.log("recupCategoryID", recupCategoryID);
+        //copieIdcategory = recupCategoryID;
+        console.log("copieIdcategory", copieIdcategory);
     }
 
     //Envoie image a l'API
-    function EnvoieAjoutImageAPI() 
+    async function EnvoieAjoutImageAPI() 
     {
+        console.log("copieIdcategory", copieIdcategory);
+
         //let categoryId /*= copiCategImg*/;
         let formData = new FormData();
 
         //Hotel First Arte - New Delhi
-        //let data = {image :'', title : '', category : 1};
-        //console.log("copieTitreImg", copieTitreImg);
-        //console.log("fileInput.files[0]", fileInput.files[0]);
-        //console.log("verifImageVu", verifImageVu.name);
-        //console.log("copeImage", copieImage);
-        //console.log("copieURLImg", copieURLImg);
-        //const convertCopiCategImg = parseInt(copiCategImg,36)*64;
-        //console.log("convertCopiCategImg", convertCopiCategImg)
-
-        //let myblob = new Blob([fileInput.files[0]], { type: imgTypeRet});
-        //console.log("blob", myblob,);
-        //const allowedFileTypes = fileTypes.indexOf(fileInput.files[0].type);
-        //console.log("allowedFileTypes", allowedFileTypes.type);
-        //console.log("fileInput.files[0]", fileInput.files[0]);
 
         formData.append('image', fileInput.files[0]);
         formData.append('title', copieTitreImg);
-        formData.append('category', copiCategImg);
+        formData.append('category', copieIdcategory);
 
         //data.image = fileInput.files[0];
         //data.title = copieTitreImg;
@@ -703,11 +675,9 @@ function VerifieDataFile()
         //const monTokenAuth = await localStorage.getItem('Tokens');
         //convertir les donnees en json
         console.log("formData", Array.from(formData));
-        const convertFormData = Object.fromEntries(formData);
-        console.log("convertFormData",convertFormData);
+        //const convertFormData = Object.fromEntries(formData);
+        //console.log("convertFormData",convertFormData);
 
-        const payload = JSON.stringify(convertFormData);
-        console.log("payload", payload);
         console.log("monToken", monToken);
 
         const ajoutImageURL = fetch('http://localhost:5678/api/works',
@@ -726,14 +696,14 @@ function VerifieDataFile()
             if(response.ok)
             {
                 console.log("L'image est envoyer avec sucés");
+                
                 messagFile.textContent = "L'image est envoyer avec sucés";
                 messagFile.style.color ='green';
 
-                //document.querySelector("#galleryJSModal").innerHTML = "";
-                //document.querySelector("#galleryJSModal").style.display = "grid";
-                //genererGallery(pictures, idgalleryJSModal);
+                newPictures();
 
-                //return response.json();
+                //location.reload();
+                return response.json();
             }
             else
             {
@@ -743,10 +713,27 @@ function VerifieDataFile()
                 //alert("HTTP-Error: " + connectPost.status);
             }
         });
-        /*.then(result => {
-        });*/
-    }
 
+        //let NewAddpictures = await window.localStorage.getItem('pictures');
+        //Partie normal
+        document.querySelector("#galleryJS").innerHTML = "";
+        genererGallery(pictures,  idgalleryJS);
+    }
+}
+
+//Permet de recuperer les nouvelle images a l'API
+async function newPictures() 
+{
+    localStorage.removeItem('pictures');
+    // Récupération les photos depuis le serveur ou  sur le site
+    const NewReponse = await fetch('http://localhost:5678/api/works'); 
+    const NewPictures = await NewReponse.json(); //Stocke les photos dans picture
+
+    // Transformation des pièces en JSON
+    const valeurPictures = JSON.stringify(NewPictures);
+
+    // Stockage des informations dans le localStorage
+    window.localStorage.setItem("pictures", valeurPictures);
 }
 
 //suppresion des images sur Api
@@ -791,28 +778,10 @@ function supprimerWork()
             const copieaBtnCorbeilImg = Array.from(document.querySelectorAll("a.btnCorbeilImg i"));
             //console.log("copieaBtnCorbeilImg",copieaBtnCorbeilImg);
 
-            /*const iCorb = selectSectFig.querySelectorAll("i");
-            console.log(" iCorb",  iCorb);
-            const copieiCorb = Array.from(iCorb);*/
 
             const btnImgCorb = copieaBtnCorbeilImg.filter(function(aCorb)
             {
-                //console.log("aCorb", aCorb);
-                //console.log(" e.target",  e.target)
-                //let ancre = e.target.closest('a');
-
-                /*let iTags = Array.from(document.querySelectorAll("a.btnCorbeilImg i"));
-                console.log("iTags", iTags);
-
-
-                const tags = iTags.filter((i)=>{
-                
-                    return i.id != aCorb.id;
-                });
-                console.log("tags", tags);*/
-
                 return aCorb != e.target;
-
             });
             //console.log("btnImgCorb", btnImgCorb);
 
@@ -824,7 +793,7 @@ function supprimerWork()
     }
 
     //Envoie image a supprimer a  l'API
-    suppriImgBtn.addEventListener('click', function()
+    suppriImgBtn.addEventListener('click', async function()
     {
         //Id des images
         let id = recupIDimg;
@@ -837,20 +806,16 @@ function supprimerWork()
             headers :{
                         //"Content-Type" : "application/json", 
                         "Authorization" : `Bearer ${monToken}`,
-                    },
+                    },   
         })
         .then(response => {
 
             if(response.ok)
             {
                 console.log("L'image est bien suppreimer");
+                newPictures();
 
-                document.querySelector("#galleryJSModal").innerHTML = "";
-                document.querySelector("#galleryJSModal").style.display = "grid";
-                genererGallery(pictures, idgalleryJSModal);
-                remplaceTitrePictures();  
-                ajoutIconeImage();
-
+                //location.reload();
                 //return response.json();
             }
             else
@@ -858,7 +823,20 @@ function supprimerWork()
                 console.log("Erreur de connexion");
                 //alert("HTTP-Error: " + connectPost.status);
             }
-        })  
+        });
+
+        //let NewSuppictures = window.localStorage.getItem('pictures');
+
+        //Partie modal
+        modal.querySelector("#galleryJSModal").innerHTML = "";
+        modal.querySelector("#galleryJSModal").style.display = "grid";
+        genererGallery(pictures, idgalleryJSModal);
+        remplaceTitrePictures();  
+        ajoutIconeImage();
+
+        //Partie normal
+        document.querySelector("#galleryJS").innerHTML = "";
+        genererGallery(pictures,  idgalleryJS);
     });
 }
 
@@ -952,14 +930,7 @@ function ajoutIconeImage()
 //Permet d'ajouter les bouton ajout/sup image
 function btnAjoutSupModal() 
 {
-    const selcGalleryJSModalBtn = document.querySelector("#sectiBtnModal")
-
-    // //Creation du section
-    // const sectBtnModal = document.createElement("section");
-    // sectBtnModal.setAttribute('id','sectiBtnModal');
-
-    // //Rattachement du balise div a son parent section
-    // selcGalleryJSModalBtn.appendChild(sectBtnModal);
+    const selcGalleryJSModalBtn = document.querySelector("#sectiBtnModal");
 
     //Creation du div
     const divBtnModal = document.createElement("div");
@@ -1187,7 +1158,8 @@ function ajouterImages()
         nbr++;
         //Creation de balise div divlistcategorie
         const optionCategorie = document.createElement("option");
-        optionCategorie.setAttribute('value', nbr);
+        //optionCategorie.setAttribute('value', nbr);
+        optionCategorie.setAttribute('name', item);
         optionCategorie.textContent = item;
 
         //Rattachement du balise optionCategorie a son parent divlistcategorie
@@ -1256,10 +1228,6 @@ const closeModal = function(e)
     //modal.querySelector('#lienRetourModal').removeEventListener('click', closeModal);
     //modal =null;
 
-    /*const selctgalleryJSMod = document.querySelector(".galleryJSModal");
-    const suppSectiBtnModal = document.querySelector("#sectiBtnModal");
-    const supp = selctgalleryJSMod.removeChild(suppSectiBtnModal);*/
-
     const hideModal = function()
     {
         modal.style.display = 'none';
@@ -1285,7 +1253,6 @@ const closeModal = function(e)
     
     document.querySelector("#lienRetourModal").style.visibility = "hidden";
 
-    //document.querySelector(".galeryModal > #sectiBtnModal").innerHTML = "";
 }
 
 const focusInModal = function (e)
@@ -1340,115 +1307,3 @@ window.addEventListener('keydown', function (e)
         focusInModal(e);
     }
 })
-
-
-
-/*
-//Decodage du token
-const decodedToken = jwt.verify(monToken,'sophie.bluel@test.tld');
-console.log("decodedToken", decodedToken);
-
-
-const verifConnectUser = function ()
-{
-
-    const recupUser = fetch("http://localhost:5678/api/users/login");
-    recupUser.then(async (response) =>{
-        try{
-            console.log("user",response)
-            const utilisateurs = await response.json();
-            console.log("utilisateurs",utilisateurs);
-            return response.json()
-        }
-        catch(e)
-        {
-            console.log(e);
-        }
-    });
-}*/
-
-
-
-//Affectation les noms des boutons
-//stockButton[0].textContent = "Tous";
-// stockButton[1].textContent = "Objets";
-// stockButton[2].textContent = "Appartements";
-// stockButton[3].textContent = "Hôtels & restaurants";
-// console.log(stockButton); //voir ce qu'il contient
-
-//Permet de change le font du couleur en vert et texte blanc des boutoun au click
-/*function changeColorVert(nomButton)
-{
-    let eltButton0 = document.getElementById(nomButton); //Recupere le bouton
-    eltButton0.style.backgroundColor = "#1D6154"; // Change la couleur du fond en vert
-    eltButton0.style.color = "#FFFFFF"; // Change la couleur du texte en blanche
-}
-
-//Permet de change le font du couleur en blanc et texte vert des boutoun au click
-function changeColorBlanc(nomButton)
-{
-    let eltButton0 = document.getElementById(nomButton); //Recupere le bouton
-    eltButton0.style.backgroundColor = "#ffffff"; // Change la couleur du fond en vert
-    eltButton0.style.color = "#1D6154"; // Change la couleur du texte en vert
-}*/
-
-/*//gestion de bouton "Tous", affichage de tous les photos par defaut
-const boutonTous = document.querySelector("#button0");
-
-// boutonTous.addEventListener("click", function()
-// {
-//     changeColorVert("button0");
-//     changeColorBlanc("button1");
-//     changeColorBlanc("button2");
-//     changeColorBlanc("button3");
-
-//     document.querySelector("#galleryJS").innerHTML = "";
-//     genererGallery(pictures);
-// });
-
-// //gestion de bouton "Objet", affichage de tous les photos par defaut
-// const boutonObjet = document.querySelector("#button1");
-
-// boutonObjet.addEventListener("click", function()
-// {
-//     const galleryFiltre = Array.from(picturesFiltre);
-//     console.log(galleryFiltre);
-    
-//    const imageObjets = galleryFiltre.filter(function(galleryObjets)
-//     {
-//         const monSet = new Set();
-//         let monTab = []
-
-//         for (let i = 0; i <galleryFiltre.length; i++) 
-//         {
-//             if (galleryFiltre[i].name == 'Objets') 
-//             {
-//                 monTab = galleryFiltre[i];  
-//             }
-//         }
-
-//         for (let i = 0; i < pictures.length; i++) 
-//         {
-//             if (pictures[i].category.name == monTab.name) 
-//             {
-//                 monSet.add = pictures[i];  
-//             }
-//         }
-
-//         //monSet.add = monTab;
-//         console.log(monTab);
-//         console.log(monSet);
-//         const montb = Array.from(monSet);
-//         return montb;
-//     });
-
-//     console.log(imageObjets);
-
-//     //document.querySelector("#galleryJS").innerHTML = "";
-//    //genererGallery(imageObjets);
-
-//     changeColorBlanc("button0");
-//     changeColorVert("button1");
-//     changeColorBlanc("button2");
-//     changeColorBlanc("button3");
-// });*/

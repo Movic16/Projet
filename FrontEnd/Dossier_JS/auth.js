@@ -25,8 +25,8 @@ document.querySelector('#btn-envoie').addEventListener('click', function()
                 document.querySelector('#Data-connected').style.color = "green";
 
                 //Retour à la page index
-                //window.location.replace("/index.html");
-                location.href = "http://127.0.0.1:5500/FrontEnd/index.html#portfolio";
+                window.location.replace("/index.html");
+                //location.href = "http://127.0.0.1:5500/FrontEnd/index.html#portfolio";
                 return response.json();
             }
             else
