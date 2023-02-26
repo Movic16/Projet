@@ -715,16 +715,14 @@ function VerifieDataFile()
         });
 
         //let NewAddpictures = await window.localStorage.getItem('pictures');
-        //Affiche la derniere image apres ajout 
-        document.querySelector("#galleryJS").innerHTML = "";
-        genererGallery(pictures,  idgalleryJS);
+        
     }
 }
 
 //Permet de recuperer les nouvelle images a l'API
 async function newPictures() 
 {
-    localStorage.removeItem('pictures');
+    window.localStorage.removeItem('pictures');
     // Récupération les photos depuis le serveur ou  sur le site
     const NewReponse = await fetch('http://localhost:5678/api/works'); 
     const NewPictures = await NewReponse.json(); //Stocke les photos dans picture
@@ -734,6 +732,44 @@ async function newPictures()
 
     // Stockage des informations dans le localStorage
     window.localStorage.setItem("pictures", valeurPictures);
+
+    //Affiche la derniere image apres ajout 
+    document.querySelector("#galleryJS").innerHTML = "";
+    genererGallery(NewPictures,  idgalleryJS);
+
+    //Selection le retour aux gallery modal
+    const btnRetourModal = modal.querySelector('#lienRetourModal')
+    btnRetourModal.addEventListener('click', function()
+    {
+        //let addpictures = window.localStorage.getItem('pictures');
+        
+        document.querySelector("#titlemodal").textContent = "Galerie photo";
+        document.querySelector(".galeryModal").style.height = "760px";
+
+        document.querySelector("#galleryJSModal").innerHTML = "";
+        document.querySelector("#galleryJSModal").style.display = "grid";
+        genererGallery(NewPictures, idgalleryJSModal);
+        remplaceTitrePictures();  
+        ajoutIconeImage();
+        
+        document.querySelector("#sectiBtnModal").innerHTML = "";
+        btnAjoutSupModal();
+        document.querySelector("#supprimerImages").style.display = "flex";
+        
+        document.querySelector("#lienRetourModal").style.visibility = "hidden";
+        supprimerWork();
+        btnVersAjoutImg();
+    });
+}
+
+function genereImgSuppModal() 
+{
+    //Partie modal apres suppression img
+    modal.querySelector("#galleryJSModal").innerHTML = "";
+    modal.querySelector("#galleryJSModal").style.display = "grid";
+    genererGallery(pictures, idgalleryJSModal);
+    remplaceTitrePictures();  
+    ajoutIconeImage();
 }
 
 //suppresion des images sur Api
@@ -813,7 +849,6 @@ function supprimerWork()
             if(response.ok)
             {
                 console.log("L'image est bien suppreimer");
-                newPictures();
 
                 //location.reload();
                 //return response.json();
@@ -825,18 +860,8 @@ function supprimerWork()
             }
         });
 
-        //let NewSuppictures = window.localStorage.getItem('pictures');
-
-        //Partie modal
-        modal.querySelector("#galleryJSModal").innerHTML = "";
-        modal.querySelector("#galleryJSModal").style.display = "grid";
-        genererGallery(pictures, idgalleryJSModal);
-        remplaceTitrePictures();  
-        ajoutIconeImage();
-
-        //Partie normal
-        document.querySelector("#galleryJS").innerHTML = "";
-        genererGallery(pictures,  idgalleryJS);
+        newPictures();
+        //genereImgSuppModal();
     });
 }
 
