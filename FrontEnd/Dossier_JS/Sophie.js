@@ -204,6 +204,7 @@ if (monToken != null)
     document.getElementById('spamBtnEdito').style.display = "flex"; //Modifier le projet
     deconnected();
     creactModal();
+    publierChange();
 }
 else if (monToken == null) 
 {
@@ -232,6 +233,16 @@ function baliseNone()
     document.getElementById('fenetreModalgallery').style.display = "none"; //Pour mettre la partie modal
 }
 
+function publierChange() 
+{
+    const publieChag = document.querySelector("#publierChange");
+    
+    publieChag.addEventListener('click', function () 
+    {
+        location.reload();
+    });
+    
+}
 
 //fonction pour se deconnecter
 function deconnected()
@@ -734,8 +745,8 @@ async function newPictures()
     window.localStorage.setItem("pictures", valeurPictures);
 
     //Affiche la derniere image apres ajout 
-    document.querySelector("#galleryJS").innerHTML = "";
-    genererGallery(NewPictures,  idgalleryJS);
+    /*document.querySelector("#galleryJS").innerHTML = "";
+    genererGallery(NewPictures,  idgalleryJS);*/
 
     //Selection le retour aux gallery modal
     const btnRetourModal = modal.querySelector('#lienRetourModal')

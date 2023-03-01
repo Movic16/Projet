@@ -178,6 +178,7 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
 }
 
 footer nav ul {
@@ -187,6 +188,12 @@ footer nav ul {
 }
 
 /********Partie ajouter**********/
+
+/** Partie contact**/
+#messageErreur
+{
+	text-align: center;
+}
 
 /****Partie filtres****/
 #filtre
@@ -870,6 +877,7 @@ body > #sect-header
 
 	text-align: center;
 	color: #FFFFFF;
+	cursor: pointer;
 }
 
 #btn-envoiFile :disabled
