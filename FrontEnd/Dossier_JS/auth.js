@@ -25,7 +25,7 @@ document.querySelector('#btn-envoie').addEventListener('click', function()
                 document.querySelector('#Data-connected').style.color = "green";
 
                 //Retour à la page index
-                window.location.replace("/index.html");
+                //window.location.replace("/index.html");
                 //location.href = "http://127.0.0.1:5500/FrontEnd/index.html#portfolio";
                 return response.json();
             }
@@ -46,6 +46,7 @@ document.querySelector('#btn-envoie').addEventListener('click', function()
             //localStorage.setItem("Tokens", JSON.stringify("recupToken"));
             localStorage.setItem("Tokens", recupToken);
             console.log("recupToken ", recupToken );
+            window.location.replace("/index.html");
 
             //document.title = "Sophie Bluel - Architecte d'intérieur";
         })

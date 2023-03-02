@@ -204,7 +204,6 @@ if (monToken != null)
     document.getElementById('spamBtnEdito').style.display = "flex"; //Modifier le projet
     deconnected();
     creactModal();
-    publierChange();
 }
 else if (monToken == null) 
 {
@@ -233,7 +232,7 @@ function baliseNone()
     document.getElementById('fenetreModalgallery').style.display = "none"; //Pour mettre la partie modal
 }
 
-function publierChange() 
+/*function publierChange() 
 {
     const publieChag = document.querySelector("#publierChange");
     
@@ -241,8 +240,7 @@ function publierChange()
     {
         location.reload();
     });
-    
-}
+}*/
 
 //fonction pour se deconnecter
 function deconnected()
@@ -625,9 +623,7 @@ function VerifieDataFile()
         console.log("picturesCategory", picturesCategory);
 
         const messagCateg = document.querySelector('#massageFile');
-
         const copietousCateg = Array.from(picturesCategory);
-
         console.log("copietousCateg", copietousCateg);
 
         const dataCateg = {name : categoryImag.value};
@@ -635,6 +631,7 @@ function VerifieDataFile()
         console.log("dataCateg", dataCateg.name);
         //const copiedataCateg = Array.from(dataCateg.name);
         //console.log("copiedataCateg", copiedataCateg);
+        //const newCategegory ={id : 4, name : "Batiment"};
 
         const recupCategoryID = copietousCateg.filter(function(idCateg)
         {
@@ -656,6 +653,43 @@ function VerifieDataFile()
             console.log("Cette categorie n'existe pas");
             messagCateg.textContent = "Cette categorie n'existe pas, choisir un autre dans la liste";
             messagCateg.style.color ='red';
+
+            /*const payload = JSON.stringify(newCategegory);
+            console.log("payload", payload);
+
+            const ajoutCategory = fetch('http://localhost:5678/api/categories',
+            {
+                method : "PUT",
+                body : payload,
+                headers :{  
+                            //"accept": "application/json",
+                            "Content-Type" : "application/json",
+                            //"Content-Type" : "multipart/form-data",
+                            "Authorization" : `bearer ${monToken}`,
+                        },
+            })
+            .then(response => {
+
+                if(response.ok)
+                {
+                    console.log("Le nouveau categorie est ajouter avec sucés");
+                    
+                    messagFile.textContent = "Le nouveau categorie est ajouter avec sucés";
+                    messagFile.style.color ='green';
+    
+                    newPictures();
+    
+                    //location.reload();
+                    return response.json();
+                }
+                else
+                {
+                    console.log("Erreur de connexion");
+                    messagFile.textContent = "Erreur de connexion";
+                    messagFile.style.color ='red';
+                    //alert("HTTP-Error: " + connectPost.status);
+                }
+            });*/
 
             return;
         }
@@ -725,8 +759,7 @@ function VerifieDataFile()
             }
         });
 
-        //let NewAddpictures = await window.localStorage.getItem('pictures');
-        
+        //let NewAddpictures = await window.localStorage.getItem('pictures'); 
     }
 }
 
@@ -745,8 +778,8 @@ async function newPictures()
     window.localStorage.setItem("pictures", valeurPictures);
 
     //Affiche la derniere image apres ajout 
-    /*document.querySelector("#galleryJS").innerHTML = "";
-    genererGallery(NewPictures,  idgalleryJS);*/
+    document.querySelector("#galleryJS").innerHTML = "";
+    genererGallery(NewPictures,  idgalleryJS);
 
     //Selection le retour aux gallery modal
     const btnRetourModal = modal.querySelector('#lienRetourModal')
