@@ -406,9 +406,9 @@ const openModal = function (e)
         document.querySelector("#lienRetourModal").style.visibility = "hidden";
         supprimerWork();
         btnVersAjoutImg();
-        newPictures();
+        //newPictures();
     });
-    newPictures();
+    //newPictures();
 }
 
 //Permet de retour à la gallery modal apres ajout image
@@ -781,12 +781,25 @@ function VerifieDataFile()
                 
                 messagFile.textContent = "L'image est bien envoyer avec sucés";
                 messagFile.style.color ='green';
-
+                
                 newPictures();
+                //pictures = JSON.parse(pictures);
                 //openModal;
 
                 //pictures = window.localStorage.getItem('pictures');
                 //location.reload();
+
+
+                document.getElementById('pI').style.display = "initial";
+                document.getElementById('pLabel').style.display = "initial";
+                document.getElementById('pLabel').style.display = "initial";
+                document.getElementById('pInf').style.display = "initial";
+                document.getElementById('figVisulImage').style.display = "none";
+
+                document.querySelector('#file').value = null;
+                document.getElementById('ImgVisul').src = "";
+                document.getElementById('titre').value = "";
+                document.getElementById('categorie').value ="";
                 return response.json();
             }
             else
@@ -816,9 +829,11 @@ async function newPictures()
 
     // Stockage des informations dans le localStorage
     window.localStorage.setItem('pictures', NewvaleurPictures);
-    //window.sessionStorage.setItem("pictures", NewvaleurPictures);
 
-    //pictures = window.sessionStorage.getItem('pictures');
+    //window.sessionStorage.setItem("pictures", NewvaleurPictures);
+    //pictures = window.localStorage.getItem('pictures');
+
+    pictures = JSON.parse(window.localStorage.getItem('pictures'));
 
     //Affiche la derniere image apres ajout 
     document.querySelector("#galleryJS").innerHTML = "";
