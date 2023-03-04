@@ -55,6 +55,12 @@ function genererGallery(pictures, idValue)
         // Ajout de l'en-tête du ballise figure puis les images
         document.querySelector('#'+ idValue).appendChild(figureElement)
                                             .appendChild(figcaptionElement);
+
+        /*if (idValue == "galleryJSModal") 
+        {
+            remplaceTitrePictures();  
+            ajoutIconeImage();
+        }*/
     } 
 }
 
@@ -385,7 +391,7 @@ const openModal = function (e)
         //let addpictures = window.localStorage.getItem('pictures');
         
         document.querySelector("#titlemodal").textContent = "Galerie photo";
-        document.querySelector(".galeryModal").style.height = "760px";
+        document.querySelector(".galeryModal").style.maxHeight = "850px";
 
         document.querySelector("#galleryJSModal").innerHTML = "";
         document.querySelector("#galleryJSModal").style.display = "grid";
@@ -400,8 +406,38 @@ const openModal = function (e)
         document.querySelector("#lienRetourModal").style.visibility = "hidden";
         supprimerWork();
         btnVersAjoutImg();
+        newPictures();
     });
+    newPictures();
 }
+
+//Permet de retour à la gallery modal apres ajout image
+/*function btnRetour(paramPicture) 
+{
+    //Selection le retour aux gallery modal
+    const btnRetourModal = modal.querySelector('#lienRetourModal')
+    btnRetourModal.addEventListener('click', function()
+    {
+        //let addpictures = window.localStorage.getItem('pictures');
+        
+        document.querySelector("#titlemodal").textContent = "Galerie photo";
+        document.querySelector(".galeryModal").style.minHeight = "600px";
+
+        document.querySelector("#galleryJSModal").innerHTML = "";
+        document.querySelector("#galleryJSModal").style.display = "grid";
+        genererGallery(paramPicture, idgalleryJSModal);
+        remplaceTitrePictures();  
+        ajoutIconeImage();
+        
+        document.querySelector("#sectiBtnModal").innerHTML = "";
+        btnAjoutSupModal();
+        document.querySelector("#supprimerImages").style.display = "flex";
+        
+        document.querySelector("#lienRetourModal").style.visibility = "hidden";
+        supprimerWork();
+        btnVersAjoutImg();
+    });
+}*/
 
 //Permet d'aller a la page d'ajout image
 function btnVersAjoutImg()
@@ -412,7 +448,7 @@ function btnVersAjoutImg()
     {   
         if(modal != null)
         {
-            document.querySelector(".galeryModal").style.height = "600px";
+            document.querySelector(".galeryModal").style.minHeight = "600px";
 
             document.querySelector("#galleryJSModal").innerHTML = "";
             ajouterImages();
@@ -420,6 +456,7 @@ function btnVersAjoutImg()
             document.querySelector("#btnModal").innerHTML = "";
             btnValidAjoutPicture();
             VerifieDataFile();
+            //btnRetour(pictures);
             e.stopImmediatePropagation();
         }
         //console.log(" e", e);
@@ -740,13 +777,15 @@ function VerifieDataFile()
 
             if(response.ok)
             {
-                console.log("L'image est envoyer avec sucés");
+                console.log("L'image est bien envoyer avec sucés");
                 
-                messagFile.textContent = "L'image est envoyer avec sucés";
+                messagFile.textContent = "L'image est bien envoyer avec sucés";
                 messagFile.style.color ='green';
 
                 newPictures();
+                //openModal;
 
+                //pictures = window.localStorage.getItem('pictures');
                 //location.reload();
                 return response.json();
             }
@@ -759,6 +798,7 @@ function VerifieDataFile()
             }
         });
 
+        //newPictures();
         //let NewAddpictures = await window.localStorage.getItem('pictures'); 
     }
 }
@@ -772,27 +812,32 @@ async function newPictures()
     const NewPictures = await NewReponse.json(); //Stocke les photos dans picture
 
     // Transformation des pièces en JSON
-    const valeurPictures = JSON.stringify(NewPictures);
+    const NewvaleurPictures = JSON.stringify(NewPictures);
 
     // Stockage des informations dans le localStorage
-    window.localStorage.setItem("pictures", valeurPictures);
+    window.localStorage.setItem('pictures', NewvaleurPictures);
+    //window.sessionStorage.setItem("pictures", NewvaleurPictures);
+
+    //pictures = window.sessionStorage.getItem('pictures');
 
     //Affiche la derniere image apres ajout 
     document.querySelector("#galleryJS").innerHTML = "";
     genererGallery(NewPictures,  idgalleryJS);
+    //btnRetour(NewPictures);
 
     //Selection le retour aux gallery modal
-    const btnRetourModal = modal.querySelector('#lienRetourModal')
+    /*const btnRetourModal = modal.querySelector('#lienRetourModal')
     btnRetourModal.addEventListener('click', function()
     {
         //let addpictures = window.localStorage.getItem('pictures');
+        pictures = window.localStorage.getItem('pictures');
         
         document.querySelector("#titlemodal").textContent = "Galerie photo";
-        document.querySelector(".galeryModal").style.height = "760px";
+        document.querySelector(".galeryModal").style.maxHeight = "850px";
 
         document.querySelector("#galleryJSModal").innerHTML = "";
         document.querySelector("#galleryJSModal").style.display = "grid";
-        genererGallery(NewPictures, idgalleryJSModal);
+        genererGallery(NewvaleurPictures, idgalleryJSModal);
         remplaceTitrePictures();  
         ajoutIconeImage();
         
@@ -803,7 +848,7 @@ async function newPictures()
         document.querySelector("#lienRetourModal").style.visibility = "hidden";
         supprimerWork();
         btnVersAjoutImg();
-    });
+    });*/
 
     const fentSupModal = modal.querySelector("#galleryJSModal > figure");
     console.log("fentSupModal",fentSupModal);
@@ -816,6 +861,7 @@ async function newPictures()
         genererGallery(NewPictures, idgalleryJSModal);
         remplaceTitrePictures();  
         ajoutIconeImage();
+        supprimerWork();
     }
 }
 
@@ -896,6 +942,10 @@ function supprimerWork()
             if(response.ok)
             {
                 console.log("L'image est bien suppreimer");
+                //newPictures();
+
+                //pictures = window.localStorage.getItem('pictures');
+                //openModal;
 
                 //location.reload();
                 //return response.json();
@@ -907,6 +957,7 @@ function supprimerWork()
             }
         });
 
+        //pictures = window.localStorage.getItem('pictures');
         newPictures();
     });
 }
@@ -1310,7 +1361,7 @@ const closeModal = function(e)
 
     //Si on est a la page ajouter image et on ferme la modal
     document.querySelector("#titlemodal").textContent = "Galerie photo";
-    document.querySelector(".galeryModal").style.height = "760px";
+    document.querySelector(".galeryModal").style.maxHeight = "850px";
 
     document.querySelector("#galleryJSModal").innerHTML = "";
     document.querySelector("#galleryJSModal").style.display = "grid";
@@ -1323,6 +1374,8 @@ const closeModal = function(e)
     document.querySelector("#supprimerImages").style.display = "flex";
     
     document.querySelector("#lienRetourModal").style.visibility = "hidden";
+    //newPictures();
+    //btnRetour(null);
 
 }
 

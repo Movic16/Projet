@@ -579,7 +579,9 @@ body > #sect-header
 .galeryModal
 {
 	width: 640px;
-	min-height: 100px;
+	min-height: 200px;
+	max-height: 850px;
+	overflow-y: auto;
 
 	background: #FFFFFF;
 	border-radius: 10px;
