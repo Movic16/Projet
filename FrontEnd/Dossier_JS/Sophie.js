@@ -633,13 +633,14 @@ function VerifieDataFile()
             validBtnFile.style.background ="#1D6154";
 
             //Pour le bouton valider ajouter imange dans l'api
-            validBtnFile.addEventListener('click',function()
+            validBtnFile.addEventListener('click',function(e)
             {
                 console.log("Envoie en cours...");
                 messagFile.textContent = "Envoie en cours...";
                 messagFile.style.color ='green';
                 recupCtegorieId();
                 EnvoieAjoutImageAPI();
+                e.stopImmediatePropagation();
             });
         }
 
@@ -672,7 +673,7 @@ function VerifieDataFile()
 
         const recupCategoryID = copietousCateg.filter(function(idCateg)
         {
-            let catgId;
+            let catgId = null;
             console.log("idCateg", idCateg);
 
             if (dataCateg.name == idCateg.name) 
@@ -680,9 +681,12 @@ function VerifieDataFile()
                 catgId = idCateg.id;
                 copieIdcategory = idCateg.id;
                 console.log("catgId.id", catgId);
-                return idCateg.id;
+                console.log("copieIdcategory", copieIdcategory);
+
+                messagCateg.textContent = "Envoie du categorie en cours...";
+                messagCateg.style.color ='green';
+                return idCateg;
             }
-            
         });
 
         if (recupCategoryID.length == 0) 
@@ -737,7 +741,7 @@ function VerifieDataFile()
     }
 
     //Envoie image a l'API
-    async function EnvoieAjoutImageAPI() 
+    function EnvoieAjoutImageAPI() 
     {
         console.log("copieIdcategory", copieIdcategory);
 
@@ -796,10 +800,24 @@ function VerifieDataFile()
                 document.getElementById('pInf').style.display = "initial";
                 document.getElementById('figVisulImage').style.display = "none";
 
+                validBtnFile.style.background ="#A7A7A7";
+                validBtnFile.setAttribute("disabled","");
+
                 document.querySelector('#file').value = null;
+                fileInput.files = null;
+                copieTitreImg = null;
+                copieIdcategory = null;
+                copiCategImg = null;
+
+                console.log("fileInput.files[0]", fileInput.files[0]);
+                console.log("copieTitreImg", copieTitreImg);
+                console.log("copieIdcategory", copieIdcategory);
+                console.log("copiCategImg", copiCategImg);
+
                 document.getElementById('ImgVisul').src = "";
-                document.getElementById('titre').value = "";
-                document.getElementById('categorie').value ="";
+                document.getElementById('titre').value ='';
+                document.getElementById('categorie').value ='';
+                autoBtnValid();
                 return response.json();
             }
             else
@@ -811,6 +829,7 @@ function VerifieDataFile()
             }
         });
 
+        //console.log("fileInput.files[0]", fileInput.files[0]);
         //newPictures();
         //let NewAddpictures = await window.localStorage.getItem('pictures'); 
     }
@@ -834,12 +853,13 @@ async function newPictures()
     //pictures = window.localStorage.getItem('pictures');
 
     pictures = JSON.parse(window.localStorage.getItem('pictures'));
+    console.log("pictures", pictures);
 
     //Affiche la derniere image apres ajout 
     document.querySelector("#galleryJS").innerHTML = "";
-    genererGallery(NewPictures,  idgalleryJS);
+    genererGallery(pictures,  idgalleryJS);
     //btnRetour(NewPictures);
-
+    
     //Selection le retour aux gallery modal
     /*const btnRetourModal = modal.querySelector('#lienRetourModal')
     btnRetourModal.addEventListener('click', function()
@@ -867,7 +887,8 @@ async function newPictures()
 
     const fentSupModal = modal.querySelector("#galleryJSModal > figure");
     console.log("fentSupModal",fentSupModal);
-    
+    console.log("modal", modal);
+
     if(fentSupModal != null)
     {
         //Partie modal apres suppression img
@@ -894,7 +915,7 @@ function supprimerWork()
     console.log("Img", Img);
 
     const suppriImgBtn = document.querySelector("#supprimerImages");
-    let recupIDimg =0;
+    let recupIDimg = 0;
 
     for (let i = 0; i < aBtnCorbeilImg.length; i++) 
     {
@@ -922,7 +943,6 @@ function supprimerWork()
             const copieaBtnCorbeilImg = Array.from(document.querySelectorAll("a.btnCorbeilImg i"));
             //console.log("copieaBtnCorbeilImg",copieaBtnCorbeilImg);
 
-
             const btnImgCorb = copieaBtnCorbeilImg.filter(function(aCorb)
             {
                 return aCorb != e.target;
@@ -937,11 +957,13 @@ function supprimerWork()
     }
 
     //Envoie image a supprimer a  l'API
-    suppriImgBtn.addEventListener('click', async function()
+    suppriImgBtn.addEventListener('click', function(event)
     {
+        //event.stopImmediatePropagation();
         //Id des images
         let id = recupIDimg;
         console.log("id", id);
+        console.log("modal", modal);
 
         const SuppImgURL = fetch(`http://localhost:5678/api/works/${id}`,
         {
@@ -957,8 +979,13 @@ function supprimerWork()
             if(response.ok)
             {
                 console.log("L'image est bien suppreimer");
-                //newPictures();
+                newPictures();
 
+                id = null;
+                recupIDimg = null;
+
+                console.log("id", id);
+                console.log("recupIDimg", recupIDimg);
                 //pictures = window.localStorage.getItem('pictures');
                 //openModal;
 
@@ -972,8 +999,9 @@ function supprimerWork()
             }
         });
 
+        //event.stopImmediatePropagation();
         //pictures = window.localStorage.getItem('pictures');
-        newPictures();
+        //newPictures();
     });
 }
 
