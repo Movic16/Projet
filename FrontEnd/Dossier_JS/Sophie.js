@@ -935,9 +935,10 @@ function supprimerWork()
                 if (altImg === pictures[i].title) 
                 {
                     recupIDimg = pictures[i].id;
+                    console.log("recupIDimg", recupIDimg);
+                    //return;
                 } 
             }
-            console.log("recupIDimg", recupIDimg);
 
             //const copieaBtnCorbeilImg = Array.from(aBtnCorbeilImg);
             const copieaBtnCorbeilImg = Array.from(document.querySelectorAll("a.btnCorbeilImg i"));
@@ -957,9 +958,9 @@ function supprimerWork()
     }
 
     //Envoie image a supprimer a  l'API
-    suppriImgBtn.addEventListener('click', function(event)
+    suppriImgBtn.addEventListener('click', function()
     {
-        //event.stopImmediatePropagation();
+        //event.stopPropagation();
         //Id des images
         let id = recupIDimg;
         console.log("id", id);
@@ -979,6 +980,7 @@ function supprimerWork()
             if(response.ok)
             {
                 console.log("L'image est bien suppreimer");
+                //id = null;
                 newPictures();
 
                 id = null;
