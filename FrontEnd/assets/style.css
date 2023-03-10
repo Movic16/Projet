@@ -302,6 +302,12 @@ footer nav ul {
 	line-height: 20px;
 }
 
+#lienNav li:hover
+{
+	font-weight: bold;
+	line-height: 20px;
+}
+
 #Lien-MDP
 {
 	margin-top: 20px;
