@@ -201,13 +201,14 @@ console.log("monToken", monToken);
 
 if (monToken != null) 
 {
-    document.querySelector('#loginUser').textContent= "Sophie"; //on remplace login par le nom de l'utilisateur
+    document.querySelector('#loginUser > #lienLogin').textContent= "Sophie"; //on remplace login par le nom de l'utilisateur
     document.getElementById('lienLogin').href ="#"; //on supprimer le lien de la page de connection
     document.getElementById('logout').style.display = "flex"; //le bouton deconnexion
     document.getElementById('sect-header').style.display = "flex"; //la barre du mode edition
     document.getElementById('editor-photo').style.display = "flex"; //Modifier la photo profil
     document.getElementById('editor-parag').style.display = "flex"; //Modifier le paragraphe cote phote
     document.getElementById('spamBtnEdito').style.display = "flex"; //Modifier le projet
+
     deconnected();
     creactModal();
 }

@@ -430,7 +430,7 @@ body > #sect-header
 	justify-content:flex-start;
 
 	font-family: 'Work Sans';
-	font-weight: 400px;
+	font-weight: bold;
 	font-size: 14px;
 	line-height: 16px;
 }
@@ -468,7 +468,7 @@ body > #sect-header
 #editor-gallery a > p
 {
 	font-family: 'Work Sans';
-	font-weight: 400px;
+	font-weight: bold;
 	font-size: 14px;
 	line-height: 16px;
 }
@@ -567,13 +567,13 @@ body > #sect-header
 
 @keyframes fadeIn
 {
-	form{ opacity: 0;}
+	from{ opacity: 0;}
 	to{opacity: 1;}
 }
 
 @keyframes fadeOut
 {
-	form{ opacity: 1;}
+	from{ opacity: 1;}
 	to{opacity: 0;}
 }
 
@@ -601,13 +601,13 @@ body > #sect-header
 
 @keyframes slideFromTop
 {
-	form{ transform: translateY(-50px);}
+	from{ transform: translateY(-50px);}
 	to{ transform: translateY(0px);}
 }
 
 @keyframes slideFromBettom
 {
-	form{ transform: translateY(0px);}
+	from{ transform: translateY(0px);}
 	to{ transform: translateY(50px);}
 }
 
